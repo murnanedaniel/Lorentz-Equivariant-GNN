@@ -55,7 +55,11 @@ class L_GCL(nn.Module):
     def compute_radials(self, edge_index, x):
         row, col = edge_index
         coordinate_differences = x[row] - x[col]
-        radial = torch.sum(coordinate_differences ** 2, 1).unsqueeze(1)
+        minkowski_distance_squared = coordinate_differences ** 2
+        minkowski_distance_squared[0] = -minkowski_distance_squared[0]
+        for i in range(len(x)):
+            minkowski_distance_squared[i][0] = -minkowski_distance_squared[i][0]
+        radial = torch.sum(minkowski_distance_squared, 1).unsqueeze(1)
         return radial, coordinate_differences
 
     def forward(self, h, x, edge_index, edge_attribute = None):
@@ -142,11 +146,11 @@ if __name__ == "__main__":
     batch_size = 8
     n_nodes = 4
     n_feat = 1
-    x_dim = 3
+    x_dim = 4
 
     # Dummy variables h, x and fully connected edges
-    h = torch.ones(batch_size *  n_nodes, n_feat)
-    x = torch.ones(batch_size * n_nodes, x_dim)
+    h = torch.rand(batch_size * n_nodes, n_feat)
+    x = torch.rand(batch_size * n_nodes, x_dim)
     edges, edge_attr = get_edges_batch(n_nodes, batch_size)
 
     # Initialize LEGNN

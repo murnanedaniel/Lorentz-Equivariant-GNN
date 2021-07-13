@@ -64,7 +64,7 @@ class SE3Transformer(nn.Module):
 
 class TFN(nn.Module):
     """Tensorfield Network"""
-
+    
     def __init__(self, num_layers: int, num_channels: int, num_degrees: int = 4, **kwargs):
         super().__init__()
         # Build the network
