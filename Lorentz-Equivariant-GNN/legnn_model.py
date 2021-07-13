@@ -8,8 +8,20 @@ class L_GCL(nn.Module):
     """
 
     def __init__(self, input_feature_dim, message_dim, output_feature_dim, edge_feature_dim, activation = nn.SiLU()):
+        """
+        Sets up the MLPs needed to compute the layer update of the equivariant network.
+
+        :param input_feature_dim: The amount of numbers needed to specify a feature inputted into the GCL
+        :param message_dim: The amount of numbers needed to specify a message passed through the GCL
+        :param output_feature_dim: The amount of numbers needed to specify the updated feature after passing through the GCL
+        :param edge_feature_dim: The amount of numbers needed to specify an edge attribute a_{ij}
+        :param activation: The activation function used as the main non-linearity throughout the GCL
+        """
+
         super(L_GCL, self).__init__()
-        radial_dim = 1
+        radial_dim = 1  # Only one number is needed to specify Minkowski distance
+
+        # The MLP used to calculate messages
         self.edge_mlp = nn.Sequential(
             nn.Linear(2 * input_feature_dim + radial_dim + edge_feature_dim, message_dim),
             activation,
@@ -17,15 +29,18 @@ class L_GCL(nn.Module):
             activation
         )
 
+        # The MLP used to update the feature vectors h_i
         self.feature_mlp = nn.Sequential(
             nn.Linear(input_feature_dim + message_dim, message_dim),
             activation,
             nn.Linear(message_dim, output_feature_dim)
         )
 
+        # Setup randomized weights
         layer = nn.Linear(message_dim, 1, bias = False)
         torch.nn.init.xavier_uniform_(layer.weight, gain = 0.001)
 
+        # The MLP used to update coordinates (node embeddings) x_i
         self.coordinate_mlp = nn.Sequential(
             nn.Linear(message_dim, message_dim),
             activation,
@@ -33,12 +48,31 @@ class L_GCL(nn.Module):
         )
 
     def compute_messages(self, source, target, radial, edge_attribute):
-        #message_inputs = torch.cat([source, target, radial], dim = 1)
-        message_inputs = torch.cat([source, target, radial, edge_attribute], dim = 1)
-        out = self.edge_mlp(message_inputs)
+        """
+        Calculates the messages to send between two nodes 'target' and 'source' to be passed through the network.
+        The message is computed via an MLP of Lorentz invariants.
+
+        :param source: The source node's feature vector
+        :param target: The target node's feature vector
+        :param radial: The Minkowski distance between the source and target's coordinates
+        :param edge_attribute: Features at the edge connecting the source and target nodes
+        :return: The message m_{ij}
+        """
+        message_inputs = torch.cat([source, target, radial, edge_attribute], dim = 1)  # Setup input for computing messages through MLP
+        out = self.edge_mlp(message_inputs)  # Apply \phi_e to calculate the messages
         return out
 
     def update_feature_vectors(self, h, edge_index, messages):
+        """
+        Updates the feature vectors via an MLP of Lorentz invariants, specifically the feature vector itself and
+        aggregated messages.
+
+        :param h: The feature vectors outputted from the previous layer
+        :param edge_index: Array containing the connection between nodes
+        :param messages: List of messages m_{ij} used to calculated an aggregated message for h
+        :return: The updated feature vectors h_i^{l+1}
+        """
+
         row, col = edge_index
         message_aggregate = unsorted_segment_sum(messages, row, num_segments = h.size(0))
         feature_inputs = torch.cat([h, message_aggregate], dim = 1)
@@ -46,18 +80,38 @@ class L_GCL(nn.Module):
         return out, message_aggregate
 
     def update_coordinates(self, x, edge_index, coordinate_difference, messages):
+        """
+        Updates the coordinates (node embeddings) through the update rule
+            x_i^{l+1} = x_i^l + Σ(x_i^l - x_j^l)\phi_x(m_{ij})
+
+        :param x: The coordinates (node embeddings) outputted from the previous layer
+        :param edge_index: Array containing the connection between nodes
+        :param coordinate_difference: The differences between two coordinates x_i and x_j
+        :param messages: List of messages m_{ij} to be passed through the coordinate MLP \phi_x
+        :return: The updated coordinates (node embeddings) x_i^{l+1}
+        """
+
         row, col = edge_index
-        weighted_differences = coordinate_difference * self.coordinate_mlp(messages)
-        relative_updated_coordinates = unsorted_segment_sum(weighted_differences, row, num_segments = x.size(0))
-        x += relative_updated_coordinates
+        weighted_differences = coordinate_difference * self.coordinate_mlp(messages)  # Latter part of the update rule
+        relative_updated_coordinates = unsorted_segment_sum(weighted_differences, row, num_segments = x.size(0))  # Computes the summation
+        x += relative_updated_coordinates  # Finishes the update rule
         return x
 
     def compute_radials(self, edge_index, x):
+        """
+        Calculates the Minkowski distance (squared) between coordinates (node embeddings) x_i and x_j
+
+        :param edge_index: Array containing the connection between nodes
+        :param x: The coordinates (node embeddings)
+        :return: Minkowski distances (squared) and coordinate differences x_i - x_j
+        """
+
         row, col = edge_index
         coordinate_differences = x[row] - x[col]
         minkowski_distance_squared = coordinate_differences ** 2
         minkowski_distance_squared[0] = -minkowski_distance_squared[0]
         for i in range(len(x)):
+            # Place minus sign on time coordinate as \eta = diag(-1, 1, 1, 1)
             minkowski_distance_squared[i][0] = -minkowski_distance_squared[i][0]
         radial = torch.sum(minkowski_distance_squared, 1).unsqueeze(1)
         return radial, coordinate_differences
@@ -74,14 +128,30 @@ class L_GCL(nn.Module):
 
 
 class LEGNN(nn.Module):
+    """
+    The main network used for Lorentz group equivariance consisting of several layers of L_GCLs
+    """
+
     def __init__(self, input_feature_dim, message_dim, output_feature_dim, edge_feature_dim,
                  device = 'cpu', activation = nn.SiLU(), n_layers = 4):
+        """
+        Sets up the equivariant network and creates the necessary L_GCL layers
+
+        :param input_feature_dim: The amount of numbers needed to specify a feature inputted into the LEGNN
+        :param message_dim: The amount of numbers needed to specify a message passed through the LEGNN
+        :param output_feature_dim: The amount of numbers needed to specify the updated feature after passing through the LEGNN
+        :param edge_feature_dim: The amount of numbers needed to specify an edge attribute a_{ij}
+        :param device: Specification on whether the cpu or gpu is to be used
+        :param activation: The activation function used as the main non-linearity throughout the LEGNN
+        :param n_layers: The number of layers the LEGNN network has
+        """
+
         super(LEGNN, self).__init__()
         self.message_dim = message_dim
         self.device = device
         self.n_layers = n_layers
-        self.feature_in = nn.Linear(input_feature_dim, message_dim)
-        self.feature_out = nn.Linear(message_dim, output_feature_dim)
+        self.feature_in = nn.Linear(input_feature_dim, message_dim)  # Initial mixing of features
+        self.feature_out = nn.Linear(message_dim, output_feature_dim) # Final mixing of features to yield desired output
         for i in range(0, n_layers):
             self.add_module("gcl_%d" % i, L_GCL(self.message_dim, self.message_dim, self.message_dim,
                                                 edge_feature_dim, activation = activation))
@@ -128,14 +198,14 @@ by a random permutation and offset by a factor depending on which graph is curre
 """
 def get_edges_batch(n_nodes, batch_size):
     edges = get_edges(n_nodes)
-    edge_attr = torch.ones(len(edges[0]) * batch_size, 1) # Create 1D-tensor of 1s for each edge for a batch of graphs
-    edges = [torch.LongTensor(edges[0]), torch.LongTensor(edges[1])] # Convert 2D array of edge links to a 2D-tensor
+    edge_attr = torch.ones(len(edges[0]) * batch_size, 1)  # Create 1D-tensor of 1s for each edge for a batch of graphs
+    edges = [torch.LongTensor(edges[0]), torch.LongTensor(edges[1])]  # Convert 2D array of edge links to a 2D-tensor
     if batch_size == 1:
         return edges, edge_attr
     elif batch_size > 1:
         rows, cols = [], []
         for i in range(batch_size):
-            rows.append(edges[0] + n_nodes * i) # Offset rows for each graph in the batch
+            rows.append(edges[0] + n_nodes * i)  # Offset rows for each graph in the batch
             cols.append(edges[1] + n_nodes * i)
         edges = [torch.cat(rows), torch.cat(cols)]
     return edges, edge_attr
