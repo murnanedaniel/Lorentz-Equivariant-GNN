@@ -213,7 +213,7 @@ def get_edges_batch(n_nodes, batch_size):
 
 if __name__ == "__main__":
     # Dummy parameters
-    batch_size = 8
+    batch_size = 1#8
     n_nodes = 4
     n_feat = 1
     x_dim = 4
@@ -223,8 +223,11 @@ if __name__ == "__main__":
     x = torch.rand(batch_size * n_nodes, x_dim)
     edges, edge_attr = get_edges_batch(n_nodes, batch_size)
 
+    print(x)
+
     # Initialize LEGNN
     legnn = LEGNN(input_feature_dim = n_feat, message_dim = 32, output_feature_dim = 1, edge_feature_dim = 1)
 
     # Run LEGNN
     h, x = legnn(h, x, edges, edge_attr)
+    print(x)
