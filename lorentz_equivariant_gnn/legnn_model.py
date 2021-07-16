@@ -109,10 +109,7 @@ class L_GCL(nn.Module):
         row, col = edge_index
         coordinate_differences = x[row] - x[col]
         minkowski_distance_squared = coordinate_differences ** 2
-        minkowski_distance_squared[0] = -minkowski_distance_squared[0]
-        for i in range(len(x)):
-            # Place minus sign on time coordinate as \eta = diag(-1, 1, 1, 1)
-            minkowski_distance_squared[i][0] = -minkowski_distance_squared[i][0]
+        minkowski_distance_squared[:, 0] = -minkowski_distance_squared[:, 0]  # Place minus sign on time coordinate as \eta = diag(-1, 1, 1, 1)
         radial = torch.sum(minkowski_distance_squared, 1).unsqueeze(1)
         return radial, coordinate_differences
 
