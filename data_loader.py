@@ -82,6 +82,18 @@ class JetDataset(Dataset):
         return sample
 
 
+def extract_four_momenta(data):
+    four_momenta = []
+    for jet in data:
+        four_momenta.append([])
+        locality_data = jet["X"]
+        energy_data = jet["E"]
+        for i in range(len(locality_data)):
+            four_momenta[-1].append(torch.cat((energy_data[i].view(1), locality_data[i, :-2])))
+
+    return four_momenta
+
+
 """
 Returns an array of edge links corresponding to a fully-connected graph
 """
@@ -98,15 +110,18 @@ def get_edges(n_nodes):
 
 
 if __name__ == '__main__':
-    all_X, all_energies, all_y = build_dataset(test_df, 1000)
+    all_X, all_energies, all_y = build_dataset(test_df, 1)#1000)
     train_dataset = JetDataset(all_X, all_energies, all_y)
     train_loader = DataLoader(train_dataset)
 
-    print(train_dataset[0])
+    #print(train_dataset[0])
+    #print(train_dataset[0]["X"])
+
+    print(extract_four_momenta([train_dataset[0]]))
 
     edges = get_edges(len(train_dataset[0]["X"]))
 
-    plt.figure(figsize=(10,10))
+    plt.figure(figsize=(10, 10))
     for edge in edges.T:
         plt.plot(train_dataset[0]["X"][edge, -2], train_dataset[0]["X"][edge, -1], c="k", linewidth=1)
 
