@@ -52,8 +52,8 @@ class L_GCL(nn.Module):
         Calculates the messages to send between two nodes 'target' and 'source' to be passed through the network.
         The message is computed via an MLP of Lorentz invariants.
 
-        :param source: The source node's feature vector
-        :param target: The target node's feature vector
+        :param source: The source node's feature vector h_i
+        :param target: The target node's feature vector h_j
         :param radial: The Minkowski distance between the source and target's coordinates
         :param edge_attribute: Features at the edge connecting the source and target nodes
         :return: The message m_{ij}
