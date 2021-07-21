@@ -8,13 +8,6 @@ import matplotlib.pyplot as plt
 import torch
 from torch.utils.data import Dataset, DataLoader
 
-device = "cuda" if torch.cuda.is_available() else "cpu"
-
-
-test_file = 'test.h5'
-with pd.HDFStore(test_file, mode='r') as store:
-    test_df = store['table']
-
 
 def calc_eta_phi(x, y, z):
     r = np.sqrt(x ** 2 + y ** 2)
@@ -85,11 +78,17 @@ class JetDataset(Dataset):
 def extract_four_momenta(data):
     four_momenta = []
     for jet in data:
-        four_momenta.append([])
+        #four_momenta.append([])
         locality_data = jet["X"]
         energy_data = jet["E"]
         for i in range(len(locality_data)):
-            four_momenta[-1].append(torch.cat((energy_data[i].view(1), locality_data[i, :-2])))
+            if i == 0:
+                four_momenta.append(torch.cat((energy_data[i].view(1), locality_data[i, :-2])))
+            elif i == 1:
+                four_momenta[-1] = torch.stack((four_momenta[-1], torch.cat((energy_data[i].view(1), locality_data[i, :-2]))))
+            else:
+                four_momenta[-1] = torch.cat((four_momenta[-1], torch.unsqueeze(torch.cat((energy_data[i].view(1), locality_data[i, :-2])), dim = 0)))
+            #four_momenta[-1].append(torch.cat((energy_data[i].view(1), locality_data[i, :-2])))
 
     return four_momenta
 
@@ -110,7 +109,11 @@ def get_edges(n_nodes):
 
 
 if __name__ == '__main__':
-    all_X, all_energies, all_y = build_dataset(test_df, 1)#1000)
+    test_file = 'test.h5'
+    with pd.HDFStore(test_file, mode = 'r') as store:
+        test_df = store['table']
+
+    all_X, all_energies, all_y = build_dataset(test_df, 1000)
     train_dataset = JetDataset(all_X, all_energies, all_y)
     train_loader = DataLoader(train_dataset)
 

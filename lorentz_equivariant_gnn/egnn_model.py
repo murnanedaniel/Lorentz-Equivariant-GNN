@@ -232,7 +232,7 @@ if __name__ == "__main__":
     x_dim = 3
 
     # Dummy variables h, x and fully connected edges
-    h = torch.ones(batch_size *  n_nodes, n_feat)
+    h = torch.ones(batch_size * n_nodes, n_feat)
     x = torch.ones(batch_size * n_nodes, x_dim)
     edges, edge_attr = get_edges_batch(n_nodes, batch_size)
 
