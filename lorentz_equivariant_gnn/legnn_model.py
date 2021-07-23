@@ -47,7 +47,7 @@ class L_GCL(nn.Module):
             layer
         )
 
-    def compute_messages(self, source, target, radial, edge_attribute):
+    def compute_messages(self, source, target, radial, edge_attribute = None):
         """
         Calculates the messages to send between two nodes 'target' and 'source' to be passed through the network.
         The message is computed via an MLP of Lorentz invariants.
@@ -58,7 +58,10 @@ class L_GCL(nn.Module):
         :param edge_attribute: Features at the edge connecting the source and target nodes
         :return: The message m_{ij}
         """
-        message_inputs = torch.cat([source, target, radial, edge_attribute], dim = 1)  # Setup input for computing messages through MLP
+        if edge_attribute is None:
+            message_inputs = torch.cat([source, target, radial], dim = 1)  # Setup input for computing messages through MLP
+        else:
+            message_inputs = torch.cat([source, target, radial, edge_attribute], dim = 1)  # Setup input for computing messages through MLP
         out = self.edge_mlp(message_inputs)  # Apply \phi_e to calculate the messages
         return out
 
@@ -93,11 +96,12 @@ class L_GCL(nn.Module):
 
         row, col = edge_index
         weighted_differences = coordinate_difference * self.coordinate_mlp(messages)  # Latter part of the update rule
-        relative_updated_coordinates = unsorted_segment_sum(weighted_differences, row, num_segments = x.size(0))  # Computes the summation
+        relative_updated_coordinates = unsorted_segment_mean(weighted_differences, row, num_segments = x.size(0))  # Computes the summation
         x += relative_updated_coordinates  # Finishes the update rule
         return x
 
-    def compute_radials(self, edge_index, x):
+    @staticmethod
+    def compute_radials(edge_index, x):
         """
         Calculates the Minkowski distance (squared) between coordinates (node embeddings) x_i and x_j
 
@@ -154,7 +158,7 @@ class LEGNN(nn.Module):
                                                 edge_feature_dim, activation = activation))
         self.to(self.device)
 
-    def forward(self, h, x, edges, edge_attribute):
+    def forward(self, h, x, edges, edge_attribute = None):
         h = self.feature_in(h)
         for i in range(0, self.n_layers):
             h, x = self._modules["gcl_%d" % i](h, x, edges, edge_attribute = edge_attribute)
@@ -171,6 +175,19 @@ def unsorted_segment_sum(data, segment_ids, num_segments):
     segment_ids = segment_ids.unsqueeze(-1).expand(-1, data.size(1))
     result.scatter_add_(0, segment_ids, data)
     return result
+
+
+"""
+This method is used to compute the message aggregation for 'mean'
+"""
+def unsorted_segment_mean(data, segment_ids, num_segments):
+    result_shape = (num_segments, data.size(1))
+    segment_ids = segment_ids.unsqueeze(-1).expand(-1, data.size(1))
+    result = data.new_full(result_shape, 0)  # Init empty result tensor.
+    count = data.new_full(result_shape, 0)
+    result.scatter_add_(0, segment_ids, data)
+    count.scatter_add_(0, segment_ids, torch.ones_like(data))
+    return result / count.clamp(min=1)
 
 
 """
