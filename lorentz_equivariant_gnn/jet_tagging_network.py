@@ -5,7 +5,7 @@ from data_loader import *
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 
-train_file = '../test.h5'#'../train.h5'
+train_file = '../train.h5'
 with pd.HDFStore(train_file, mode = 'r') as store:
     train_df = store['table']
 
@@ -21,7 +21,7 @@ val_all_p, val_all_y = build_dataset(val_df, 1000)
 val_dataset = JetDataset(val_all_p, val_all_y)
 val_loader = DataLoader(val_dataset)
 
-model = LEGNN(input_feature_dim = 1, message_dim = 32, output_feature_dim = 1, edge_feature_dim = 0, n_layers = 1)
+model = LEGNN(input_feature_dim = 1, message_dim = 32, output_feature_dim = 1, edge_feature_dim = 0, n_layers = 4)
 
 # Train the network
 train_config = {"n_epochs": 200,

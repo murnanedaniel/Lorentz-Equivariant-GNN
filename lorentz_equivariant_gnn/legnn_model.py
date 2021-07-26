@@ -26,25 +26,27 @@ class L_GCL(nn.Module):
             nn.Linear(2 * input_feature_dim + radial_dim + edge_feature_dim, message_dim),
             activation,
             nn.Linear(message_dim, message_dim),
-            activation
+            nn.Softsign()
+            #activation
         )
 
         # The MLP used to update the feature vectors h_i
         self.feature_mlp = nn.Sequential(
             nn.Linear(input_feature_dim + message_dim, message_dim),
             activation,
-            nn.Linear(message_dim, output_feature_dim)
+            nn.Linear(message_dim, output_feature_dim),
+            nn.Softsign()
         )
 
         # Setup randomized weights
-        layer = nn.Linear(message_dim, 1, bias = False)
-        torch.nn.init.xavier_uniform_(layer.weight, gain = 0.001)
+        self.layer = nn.Linear(message_dim, 1, bias = False)
+        torch.nn.init.xavier_uniform_(self.layer.weight, gain = 0.001)
 
         # The MLP used to update coordinates (node embeddings) x_i
         self.coordinate_mlp = nn.Sequential(
             nn.Linear(message_dim, message_dim),
             activation,
-            layer
+            self.layer
         )
 
     def compute_messages(self, source, target, radial, edge_attribute = None):
@@ -95,6 +97,8 @@ class L_GCL(nn.Module):
         """
 
         row, col = edge_index
+        #print(messages)
+        #print(self.coordinate_mlp(messages))
         weighted_differences = coordinate_difference * self.coordinate_mlp(messages)  # Latter part of the update rule
         relative_updated_coordinates = unsorted_segment_mean(weighted_differences, row, num_segments = x.size(0))  # Computes the summation
         x += relative_updated_coordinates  # Finishes the update rule
