@@ -15,7 +15,7 @@ def get_four_momenta(jet_tuple):
     y_values = np.array([getattr(jet_tuple, f'PY_{i}') for i in range(200)])
     z_values = np.array([getattr(jet_tuple, f'PZ_{i}') for i in range(200)])
 
-    existing_jet_mask = energies > 0
+    existing_jet_mask = True#energies > 0
     energies, x_values, y_values, z_values = energies[existing_jet_mask], x_values[existing_jet_mask], y_values[
         existing_jet_mask], z_values[existing_jet_mask]
 

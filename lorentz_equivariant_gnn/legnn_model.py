@@ -20,6 +20,7 @@ class L_GCL(nn.Module):
 
         super(L_GCL, self).__init__()
         radial_dim = 1  # Only one number is needed to specify Minkowski distance
+        coordinate_dim = 4
 
         # The MLP used to calculate messages
         self.edge_mlp = nn.Sequential(
@@ -48,6 +49,8 @@ class L_GCL(nn.Module):
             activation,
             self.layer
         )
+
+        self.coordinate_linear_combination_mlp = nn.Linear(2 * coordinate_dim, coordinate_dim, bias = False)
 
     def compute_messages(self, source, target, radial, edge_attribute = None):
         """
@@ -97,10 +100,15 @@ class L_GCL(nn.Module):
         """
 
         row, col = edge_index
+
+        linear_input = torch.cat([x[row], x[col]], dim = 1)
+        coordinate_linear_combination = self.coordinate_linear_combination_mlp(linear_input)
+
         #print(messages)
         #print(self.coordinate_mlp(messages))
-        weighted_differences = coordinate_difference * self.coordinate_mlp(messages)  # Latter part of the update rule
-        relative_updated_coordinates = unsorted_segment_mean(weighted_differences, row, num_segments = x.size(0))  # Computes the summation
+        #weighted_differences = coordinate_difference * self.coordinate_mlp(messages)  # Latter part of the update rule
+        weighted_linear_combination = coordinate_linear_combination * self.coordinate_mlp(messages)  # Latter part of the update rule
+        relative_updated_coordinates = unsorted_segment_mean(weighted_linear_combination, row, num_segments = x.size(0))  # Computes the summation
         x += relative_updated_coordinates  # Finishes the update rule
         return x
 
@@ -156,7 +164,8 @@ class LEGNN(nn.Module):
         self.device = device
         self.n_layers = n_layers
         self.feature_in = nn.Linear(input_feature_dim, message_dim)  # Initial mixing of features
-        self.feature_out = nn.Linear(message_dim, output_feature_dim) # Final mixing of features to yield desired output
+        self.feature_out = nn.Linear(message_dim, output_feature_dim)  # Final mixing of features to yield desired output
+
         for i in range(0, n_layers):
             self.add_module("gcl_%d" % i, L_GCL(self.message_dim, self.message_dim, self.message_dim,
                                                 edge_feature_dim, activation = activation))
