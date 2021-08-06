@@ -21,7 +21,8 @@ val_all_p, val_all_y = build_dataset(val_df, 1000)
 val_dataset = JetDataset(val_all_p, val_all_y)
 val_loader = DataLoader(val_dataset)
 
-model = LEGNN(input_feature_dim = 1, message_dim = 32, output_feature_dim = 2, edge_feature_dim = 0, n_layers = 6)
+model = LEGNN(input_feature_dim = 1, message_dim = 32, output_feature_dim = 2, edge_feature_dim = 0, device = device, n_layers = 6)
+model.share_memory()
 
 # Train the network
 train_config = {"n_epochs": 200,
@@ -39,79 +40,86 @@ loss_fn = torch.nn.BCELoss()
 #except:
 #    pass
 
-for epoch in range(train_config["n_epochs"]):
-    print(f"Epoch: {epoch}")
 
-    total_loss = 0
-    val_loss = 0
-    tp = 0
+def train():
+    for epoch in range(train_config["n_epochs"]):
+        print(f"Epoch: {epoch}")
 
-    for i, batch in enumerate(train_loader):
-        print(f"Batch: {i}")
-        optimizer.zero_grad()
+        total_loss = 0
+        val_loss = 0
+        tp = 0
 
-        p, y = torch.squeeze(batch["p"].to(device)), batch["y"].to(device)
+        for i, batch in enumerate(train_loader):
+            #print(f"Batch: {i}")
+            optimizer.zero_grad()
 
-        #print(p.size())
-        #non_empty_mask = p.abs().sum(dim = 0).bool()
-        #p = p[:, non_empty_mask]
+            p, y = torch.squeeze(batch["p"].to(device)), batch["y"].to(device)
 
-        n_nodes = p.size()[0]
+            # print(p.size())
+            # non_empty_mask = p.abs().sum(dim = 0).bool()
+            # p = p[:, non_empty_mask]
 
-        edges = get_edges(n_nodes)
-        row, column = edges
+            n_nodes = p.size()[0]
 
-        h, _ = L_GCL.compute_radials(edges, p) #torch.zeros(n_nodes, 1)
+            edges = get_edges(n_nodes)
+            row, column = edges
 
-        output, x = model(h, p, edges)
+            h, _ = L_GCL.compute_radials(edges, p)  # torch.zeros(n_nodes, 1)
 
-        #output, _ = L_GCL.compute_radials(edges, x)
-        # output = torch.sigmoid(torch.mean(output).unsqueeze(0))
+            output, x = model(h, p, edges)
 
-        output = torch.mean(output)
-        output = torch.sigmoid(output)
-        output = output.unsqueeze(0)
+            # output, _ = L_GCL.compute_radials(edges, x)
+            # output = torch.sigmoid(torch.mean(output).unsqueeze(0))
 
-        #print(str(output) + '\t\t\t' + str(y))
+            output = torch.mean(output)
+            output = torch.sigmoid(output)
+            output = output.unsqueeze(0)
 
-        loss = loss_fn(output, y.float())
-        total_loss += loss.item()
+            # print(str(output) + '\t\t\t' + str(y))
 
-        loss.backward()
-        optimizer.step()
+            loss = loss_fn(output, y.float())
+            total_loss += loss.item()
 
-    scheduler.step()
-    print(f"Train Loss: {total_loss}")
+            loss.backward()
+            optimizer.step()
 
-    for i, batch in enumerate(val_loader):
-        p, y = torch.squeeze(batch["p"].to(device)), batch["y"].to(device)
-        n_nodes = p.size()[0]
+        scheduler.step()
+        print(f"Train Loss: {total_loss}")
 
-        edges = get_edges(n_nodes)
-        row, column = edges
+        for i, batch in enumerate(val_loader):
+            p, y = torch.squeeze(batch["p"].to(device)), batch["y"].to(device)
+            n_nodes = p.size()[0]
 
-        h, _ = L_GCL.compute_radials(edges, p)#torch.zeros(n_nodes, 1)
+            edges = get_edges(n_nodes)
+            row, column = edges
 
-        output, x = model(h, p, edges)
+            h, _ = L_GCL.compute_radials(edges, p)  # torch.zeros(n_nodes, 1)
 
-        #output, _ = L_GCL.compute_radials(edges, x)
-        #output = torch.sigmoid(torch.mean(output).unsqueeze(0))
+            output, x = model(h, p, edges)
 
-        output = torch.mean(output)
-        output = torch.sigmoid(output)
-        output = output.unsqueeze(0)
+            # output, _ = L_GCL.compute_radials(edges, x)
+            # output = torch.sigmoid(torch.mean(output).unsqueeze(0))
 
-        prediction = output.round()
+            output = torch.mean(output)
+            output = torch.sigmoid(output)
+            output = output.unsqueeze(0)
 
-        loss = loss_fn(output, y.float())
-        val_loss += loss.item()
+            prediction = output.round()
 
-        tp += (prediction == y).item()
+            loss = loss_fn(output, y.float())
+            val_loss += loss.item()
 
-    print(f"Val Loss: {val_loss}, Accuracy: {tp / len(val_loader)}")
-    torch.save({
-        'epoch': epoch,
-        'model_state_dict': model.state_dict(),
-        'optimizer_state_dict': optimizer.state_dict(),
-        'loss': loss
-    }, 'legnn.pt')
+            tp += (prediction == y).item()
+
+        print(f"Val Loss: {val_loss}, Accuracy: {tp / len(val_loader)}")
+        torch.save({
+            'epoch'               : epoch,
+            'model_state_dict'    : model.state_dict(),
+            'optimizer_state_dict': optimizer.state_dict(),
+            'loss'                : loss
+        }, 'legnn.pt')
+
+
+if __name__ == '__main__':
+    torch.set_num_threads(2)
+    train()

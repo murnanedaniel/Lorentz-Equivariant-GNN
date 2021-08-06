@@ -172,10 +172,16 @@ class LEGNN(nn.Module):
         self.to(self.device)
 
     def forward(self, h, x, edges, edge_attribute = None):
+        h.to(self.device)
+        x.to(self.device)
         h = self.feature_in(h)
+        h.to(self.device)
         for i in range(0, self.n_layers):
             h, x = self._modules["gcl_%d" % i](h, x, edges, edge_attribute = edge_attribute)
+            h.to(self.device)
+            x.to(self.device)
         h = self.feature_out(h)
+        h.to(self.device)
         return h, x
 
 
