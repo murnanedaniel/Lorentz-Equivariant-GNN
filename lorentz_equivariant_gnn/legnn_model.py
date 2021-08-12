@@ -7,7 +7,7 @@ class L_GCL(nn.Module):
     SO+(1, 3) Equivariant Convolution Layer
     """
 
-    def __init__(self, input_feature_dim, message_dim, output_feature_dim, edge_feature_dim, activation = nn.SiLU()):
+    def __init__(self, input_feature_dim, message_dim, output_feature_dim, edge_feature_dim, activation = nn.SiLU(), device = 'cpu'):
         """
         Sets up the MLPs needed to compute the layer update of the equivariant network.
 
@@ -21,6 +21,8 @@ class L_GCL(nn.Module):
         super(L_GCL, self).__init__()
         radial_dim = 1  # Only one number is needed to specify Minkowski distance
         coordinate_dim = 4
+        self.device = device
+        self.to(device)
 
         # The MLP used to calculate messages
         self.edge_mlp = nn.Sequential(
@@ -67,7 +69,9 @@ class L_GCL(nn.Module):
             message_inputs = torch.cat([source, target, radial], dim = 1)  # Setup input for computing messages through MLP
         else:
             message_inputs = torch.cat([source, target, radial, edge_attribute], dim = 1)  # Setup input for computing messages through MLP
+        message_inputs = message_inputs.to(self.device)
         out = self.edge_mlp(message_inputs)  # Apply \phi_e to calculate the messages
+        out = out.to(self.device)
         return out
 
     def update_feature_vectors(self, h, edge_index, messages):
@@ -82,9 +86,11 @@ class L_GCL(nn.Module):
         """
 
         row, col = edge_index
-        message_aggregate = unsorted_segment_sum(messages, row, num_segments = h.size(0))
+        message_aggregate = unsorted_segment_sum(messages, row, num_segments = h.size(0), device = self.device)
         feature_inputs = torch.cat([h, message_aggregate], dim = 1)
+        feature_inputs = feature_inputs.to(self.device)
         out = self.feature_mlp(feature_inputs)
+        out = out.to(self.device)
         return out, message_aggregate
 
     def update_coordinates(self, x, edge_index, coordinate_difference, messages):
@@ -102,13 +108,17 @@ class L_GCL(nn.Module):
         row, col = edge_index
 
         linear_input = torch.cat([x[row], x[col]], dim = 1)
+        linear_input = linear_input.to(self.device)
         coordinate_linear_combination = self.coordinate_linear_combination_mlp(linear_input)
+        coordinate_linear_combination = coordinate_linear_combination.to(self.device)
 
         #print(messages)
         #print(self.coordinate_mlp(messages))
         #weighted_differences = coordinate_difference * self.coordinate_mlp(messages)  # Latter part of the update rule
         weighted_linear_combination = coordinate_linear_combination * self.coordinate_mlp(messages)  # Latter part of the update rule
-        relative_updated_coordinates = unsorted_segment_mean(weighted_linear_combination, row, num_segments = x.size(0))  # Computes the summation
+        weighted_linear_combination = weighted_linear_combination.to(self.device)
+        relative_updated_coordinates = unsorted_segment_mean(weighted_linear_combination, row, num_segments = x.size(0), device = self.device)  # Computes the summation
+        relative_updated_coordinates = relative_updated_coordinates.to(self.device)
         x += relative_updated_coordinates  # Finishes the update rule
         return x
 
@@ -168,30 +178,32 @@ class LEGNN(nn.Module):
 
         for i in range(0, n_layers):
             self.add_module("gcl_%d" % i, L_GCL(self.message_dim, self.message_dim, self.message_dim,
-                                                edge_feature_dim, activation = activation))
+                                                edge_feature_dim, activation = activation, device = device))
         self.to(self.device)
 
     def forward(self, h, x, edges, edge_attribute = None):
-        h.to(self.device)
-        x.to(self.device)
+        h = h.to(self.device)
+        x = x.to(self.device)
         h = self.feature_in(h)
-        h.to(self.device)
+        h = h.to(self.device)
         for i in range(0, self.n_layers):
             h, x = self._modules["gcl_%d" % i](h, x, edges, edge_attribute = edge_attribute)
-            h.to(self.device)
-            x.to(self.device)
+            h = h.to(self.device)
+            x = x.to(self.device)
         h = self.feature_out(h)
-        h.to(self.device)
+        h = h.to(self.device)
         return h, x
 
 
 """
 This method is used to compute the message aggregation for 'sum'
 """
-def unsorted_segment_sum(data, segment_ids, num_segments):
+def unsorted_segment_sum(data, segment_ids, num_segments, device = 'cpu'):
     result_shape = (num_segments, data.size(1))
     result = data.new_full(result_shape, 0)  # Init empty result tensor.
+    result = result.to(device)
     segment_ids = segment_ids.unsqueeze(-1).expand(-1, data.size(1))
+    segment_ids = segment_ids.to(device)
     result.scatter_add_(0, segment_ids, data)
     return result
 
@@ -199,11 +211,14 @@ def unsorted_segment_sum(data, segment_ids, num_segments):
 """
 This method is used to compute the message aggregation for 'mean'
 """
-def unsorted_segment_mean(data, segment_ids, num_segments):
+def unsorted_segment_mean(data, segment_ids, num_segments, device = 'cpu'):
     result_shape = (num_segments, data.size(1))
     segment_ids = segment_ids.unsqueeze(-1).expand(-1, data.size(1))
+    segment_ids = segment_ids.to(device)
     result = data.new_full(result_shape, 0)  # Init empty result tensor.
+    result = result.to(device)
     count = data.new_full(result_shape, 0)
+    count = count.to(device)
     result.scatter_add_(0, segment_ids, data)
     count.scatter_add_(0, segment_ids, torch.ones_like(data))
     return result / count.clamp(min=1)
