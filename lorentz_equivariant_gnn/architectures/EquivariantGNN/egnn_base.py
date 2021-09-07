@@ -73,7 +73,7 @@ class EGNNBase(LightningModule):
         n_nodes = p.size()[0]
 
         edges = get_edges(n_nodes)
-
+        
         output, x = self(p, edges)
 
         # output, _ = L_GCL.compute_radials(edges, x)
@@ -101,11 +101,8 @@ class EGNNBase(LightningModule):
         n_nodes = p.size()[0]
 
         edges = get_edges(n_nodes)
-        row, column = edges
 
-        h, _ = compute_radials(edges, p)  # torch.zeros(n_nodes, 1)
-
-        output, x = self(h, p, edges)
+        output, x = self(p, edges)
 
         # output, _ = L_GCL.compute_radials(edges, x)
         # output = torch.sigmoid(torch.mean(output).unsqueeze(0))

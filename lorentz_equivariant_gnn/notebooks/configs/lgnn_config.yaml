@@ -1,6 +1,6 @@
 # Data params
 input_dir: /global/cscratch1/sd/danieltm/ExaTrkX/top_tagging/raw_input/
-data_split: [100,100]
+data_split: [1000,100]
 
 # Training params
 n_epochs: 30

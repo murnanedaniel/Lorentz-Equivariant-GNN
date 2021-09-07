@@ -182,6 +182,23 @@ class LEGNN(EGNNBase):
             h, x = self._modules["gcl_%d" % i](h, x, edges, edge_attribute = edge_attribute)
         h = self.feature_out(h)
         return h, x
+    
+    @staticmethod
+    def compute_radials(edge_index, x):
+        """
+        Calculates the Minkowski distance (squared) between coordinates (node embeddings) x_i and x_j
+
+        :param edge_index: Array containing the connection between nodes
+        :param x: The coordinates (node embeddings)
+        :return: Minkowski distances (squared) and coordinate differences x_i - x_j
+        """
+
+        row, col = edge_index
+        coordinate_differences = x[row] - x[col]
+        minkowski_distance_squared = coordinate_differences ** 2
+        minkowski_distance_squared[:, 0] = -minkowski_distance_squared[:, 0]  # Place minus sign on time coordinate as \eta = diag(-1, 1, 1, 1)
+        radial = torch.sum(minkowski_distance_squared, 1).unsqueeze(1)
+        return radial, coordinate_differences
 
 
 """
@@ -226,22 +243,7 @@ def get_edges(n_nodes):
     
     return bidirectional_edges
 
-@staticmethod
-    def compute_radials(edge_index, x):
-        """
-        Calculates the Minkowski distance (squared) between coordinates (node embeddings) x_i and x_j
 
-        :param edge_index: Array containing the connection between nodes
-        :param x: The coordinates (node embeddings)
-        :return: Minkowski distances (squared) and coordinate differences x_i - x_j
-        """
-
-        row, col = edge_index
-        coordinate_differences = x[row] - x[col]
-        minkowski_distance_squared = coordinate_differences ** 2
-        minkowski_distance_squared[:, 0] = -minkowski_distance_squared[:, 0]  # Place minus sign on time coordinate as \eta = diag(-1, 1, 1, 1)
-        radial = torch.sum(minkowski_distance_squared, 1).unsqueeze(1)
-        return radial, coordinate_differences
 
 """
 Creates an extended version of get_edges(n_nodes) whereby an arbitrary number of batches may be created.
