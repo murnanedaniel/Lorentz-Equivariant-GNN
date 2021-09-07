@@ -1,3 +1,7 @@
 venv
 .idea
 .pyc
+
+
+*logs*
+*wandb*
