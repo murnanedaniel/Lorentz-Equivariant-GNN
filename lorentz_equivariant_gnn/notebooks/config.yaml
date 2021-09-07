@@ -1,0 +1,18 @@
+# Data params
+input_dir: /global/cscratch1/sd/danieltm/ExaTrkX/top_tagging/raw_input/
+data_split: [100,100]
+
+# Training params
+n_epochs: 30
+lr: 0.0001
+factor: 0.3
+patience: 10
+warmup: 1000
+
+# Model params
+input_feature_dim: 1
+message_dim: 64
+output_feature_dim: 2
+edge_feature_dim: 0
+n_layers: 6
+activation: SiLU

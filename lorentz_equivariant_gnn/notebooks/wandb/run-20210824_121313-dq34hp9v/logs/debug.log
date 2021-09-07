@@ -1,0 +1,79 @@
+2021-08-24 12:13:13,033 INFO    MainThread:32778 [wandb_setup.py:_flush():68] setting env: {}
+2021-08-24 12:13:13,033 INFO    MainThread:32778 [wandb_setup.py:_flush():68] multiprocessing start_methods=fork,spawn,forkserver
+2021-08-24 12:13:13,033 INFO    MainThread:32778 [wandb_setup.py:_flush():68] setting login settings: {}
+2021-08-24 12:13:13,033 INFO    MainThread:32778 [wandb_setup.py:_flush():68] configuring jupyter hooks <wandb.sdk.wandb_init._WandbInit object at 0x2aab4e215390>
+2021-08-24 12:13:13,033 INFO    MainThread:32778 [wandb_init.py:_log_setup():301] Logging user logs to wandb/run-20210824_121313-dq34hp9v/logs/debug.log
+2021-08-24 12:13:13,033 INFO    MainThread:32778 [wandb_init.py:_log_setup():302] Logging internal logs to wandb/run-20210824_121313-dq34hp9v/logs/debug-internal.log
+2021-08-24 12:13:14,617 INFO    MainThread:32778 [wandb_run.py:_console_start():1322] atexit reg
+2021-08-24 12:13:14,620 INFO    MainThread:32778 [wandb_run.py:_redirect():1192] redirect: SettingsConsole.WRAP
+2021-08-24 12:13:14,620 INFO    MainThread:32778 [wandb_run.py:_redirect():1223] Wrapping output streams.
+2021-08-24 12:13:14,620 INFO    MainThread:32778 [wandb_run.py:_redirect():1239] Redirects installed.
+2021-08-24 12:13:14,621 INFO    MainThread:32778 [wandb_run.py:_config_callback():654] config_cb None None {'_wandb': {'cli_version': '0.10.9', 'python_version': '3.7.7', 'is_jupyter_run': True, 'is_kaggle_kernel': False, 'framework': 'torch'}, 'input_dir': '/global/cscratch1/sd/danieltm/ExaTrkX/top_tagging/raw_input/', 'data_split': [100, 100], 'n_epochs': 20, 'lr': 0.001, 'factor': 0.3, 'patience': 10, 'input_feature_dim': 1, 'message_dim': 32, 'output_feature_dim': 2, 'edge_feature_dim': 0, 'n_layers': 6, 'activation': 'SiLU'}
+2021-08-24 12:13:15,729 INFO    MainThread:32778 [wandb_init.py:_pause_backend():222] pausing backend
+2021-08-24 12:13:49,290 INFO    MainThread:32778 [wandb_init.py:_resume_backend():227] resuming backend
+2021-08-24 12:13:49,298 INFO    MainThread:32778 [wandb_init.py:_pause_backend():222] pausing backend
+2021-08-24 12:13:49,632 INFO    MainThread:32778 [wandb_init.py:_resume_backend():227] resuming backend
+2021-08-24 12:13:58,946 INFO    MainThread:32778 [wandb_run.py:_config_callback():654] config_cb None None {'_wandb': {'cli_version': '0.10.9', 'python_version': '3.7.7', 'is_jupyter_run': True, 'is_kaggle_kernel': False, 'framework': 'torch'}, 'input_dir': '/global/cscratch1/sd/danieltm/ExaTrkX/top_tagging/raw_input/', 'data_split': [100, 100], 'n_epochs': 20, 'lr': 0.001, 'factor': 0.3, 'patience': 10, 'input_feature_dim': 1, 'message_dim': 32, 'output_feature_dim': 2, 'edge_feature_dim': 0, 'n_layers': 6, 'activation': 'SiLU'}
+2021-08-24 12:14:00,292 INFO    MainThread:32778 [wandb_init.py:_pause_backend():222] pausing backend
+2021-08-24 12:17:28,787 INFO    MainThread:32778 [wandb_init.py:_resume_backend():227] resuming backend
+2021-08-24 12:17:28,797 INFO    MainThread:32778 [wandb_init.py:_pause_backend():222] pausing backend
+2021-08-24 12:17:29,120 INFO    MainThread:32778 [wandb_init.py:_resume_backend():227] resuming backend
+2021-08-24 12:17:38,087 INFO    MainThread:32778 [wandb_run.py:_config_callback():654] config_cb None None {'_wandb': {'cli_version': '0.10.9', 'python_version': '3.7.7', 'is_jupyter_run': True, 'is_kaggle_kernel': False, 'framework': 'torch'}, 'input_dir': '/global/cscratch1/sd/danieltm/ExaTrkX/top_tagging/raw_input/', 'data_split': [100, 100], 'n_epochs': 20, 'lr': 0.001, 'factor': 0.3, 'patience': 10, 'input_feature_dim': 1, 'message_dim': 32, 'output_feature_dim': 2, 'edge_feature_dim': 0, 'n_layers': 6, 'activation': 'SiLU'}
+2021-08-24 12:17:39,277 INFO    MainThread:32778 [wandb_init.py:_pause_backend():222] pausing backend
+2021-08-24 12:18:53,465 INFO    MainThread:32778 [wandb_init.py:_resume_backend():227] resuming backend
+2021-08-24 12:18:53,475 INFO    MainThread:32778 [wandb_init.py:_pause_backend():222] pausing backend
+2021-08-24 12:18:53,729 INFO    MainThread:32778 [wandb_init.py:_resume_backend():227] resuming backend
+2021-08-24 12:19:03,423 INFO    MainThread:32778 [wandb_run.py:_config_callback():654] config_cb None None {'_wandb': {'cli_version': '0.10.9', 'python_version': '3.7.7', 'is_jupyter_run': True, 'is_kaggle_kernel': False, 'framework': 'torch'}, 'input_dir': '/global/cscratch1/sd/danieltm/ExaTrkX/top_tagging/raw_input/', 'data_split': [100, 100], 'n_epochs': 20, 'lr': 0.001, 'factor': 0.3, 'patience': 10, 'input_feature_dim': 1, 'message_dim': 32, 'output_feature_dim': 2, 'edge_feature_dim': 0, 'n_layers': 6, 'activation': 'SiLU'}
+2021-08-24 12:19:04,612 INFO    MainThread:32778 [wandb_init.py:_pause_backend():222] pausing backend
+2021-08-24 12:20:45,257 INFO    MainThread:32778 [wandb_init.py:_resume_backend():227] resuming backend
+2021-08-24 12:20:45,265 INFO    MainThread:32778 [wandb_init.py:_pause_backend():222] pausing backend
+2021-08-24 12:20:45,495 INFO    MainThread:32778 [wandb_init.py:_resume_backend():227] resuming backend
+2021-08-24 12:21:09,676 INFO    MainThread:32778 [wandb_run.py:_config_callback():654] config_cb None None {'_wandb': {'cli_version': '0.10.9', 'python_version': '3.7.7', 'is_jupyter_run': True, 'is_kaggle_kernel': False, 'framework': 'torch'}, 'input_dir': '/global/cscratch1/sd/danieltm/ExaTrkX/top_tagging/raw_input/', 'data_split': [100, 100], 'n_epochs': 20, 'lr': 0.001, 'factor': 0.3, 'patience': 10, 'input_feature_dim': 1, 'message_dim': 32, 'output_feature_dim': 2, 'edge_feature_dim': 0, 'n_layers': 6, 'activation': 'SiLU'}
+2021-08-24 12:21:10,417 INFO    MainThread:32778 [wandb_init.py:_pause_backend():222] pausing backend
+2021-08-24 12:23:12,657 INFO    MainThread:32778 [wandb_init.py:_resume_backend():227] resuming backend
+2021-08-24 12:23:12,662 INFO    MainThread:32778 [wandb_init.py:_pause_backend():222] pausing backend
+2021-08-24 12:23:14,903 INFO    MainThread:32778 [wandb_init.py:_resume_backend():227] resuming backend
+2021-08-24 12:23:14,919 INFO    MainThread:32778 [wandb_init.py:_pause_backend():222] pausing backend
+2021-08-24 12:23:16,511 INFO    MainThread:32778 [wandb_init.py:_resume_backend():227] resuming backend
+2021-08-24 12:23:16,514 INFO    MainThread:32778 [wandb_init.py:_pause_backend():222] pausing backend
+2021-08-24 12:24:21,645 INFO    MainThread:32778 [wandb_init.py:_resume_backend():227] resuming backend
+2021-08-24 12:24:21,660 INFO    MainThread:32778 [wandb_init.py:_pause_backend():222] pausing backend
+2021-08-24 12:24:25,772 INFO    MainThread:32778 [wandb_init.py:_resume_backend():227] resuming backend
+2021-08-24 12:24:25,773 INFO    MainThread:32778 [wandb_init.py:_pause_backend():222] pausing backend
+2021-08-24 12:24:26,111 INFO    MainThread:32778 [wandb_init.py:_resume_backend():227] resuming backend
+2021-08-24 12:24:26,115 INFO    MainThread:32778 [wandb_init.py:_pause_backend():222] pausing backend
+2021-08-24 12:24:26,251 INFO    MainThread:32778 [wandb_init.py:_resume_backend():227] resuming backend
+2021-08-24 12:24:26,268 INFO    MainThread:32778 [wandb_init.py:_pause_backend():222] pausing backend
+2021-08-24 12:24:33,800 INFO    MainThread:32778 [wandb_run.py:_atexit_cleanup():1295] got exitcode: 0
+2021-08-24 12:24:33,800 INFO    MainThread:32778 [wandb_run.py:_restore():1267] restore
+2021-08-24 12:24:33,805 INFO    MainThread:32778 [wandb_run.py:_wait_for_finish():1409] got exit ret: uuid: "3cb70310872b4ec69d3d5acfbf40cf51"
+response {
+  poll_exit_response {
+    file_counts {
+      wandb_count: 1
+    }
+    pusher_stats {
+      uploaded_bytes: 925
+      total_bytes: 925
+    }
+  }
+}
+
+2021-08-24 12:24:35,813 INFO    MainThread:32778 [wandb_run.py:_wait_for_finish():1409] got exit ret: uuid: "1d2656e6cd404d17bc2968b9fb7eda54"
+response {
+  poll_exit_response {
+    done: true
+    exit_result {
+    }
+    file_counts {
+      wandb_count: 5
+    }
+    pusher_stats {
+      uploaded_bytes: 12491
+      total_bytes: 12491
+    }
+  }
+}
+
+2021-08-24 12:24:36,898 INFO    MainThread:32778 [wandb_run.py:_show_files():1618] logging synced files
+2021-08-24 12:24:36,900 INFO    MainThread:32778 [internal.py:handle_exit():138] Internal process exited

@@ -1,0 +1,459 @@
+2021-08-24 12:50:22,111 INFO    MainThread:5226 [internal.py:wandb_internal():63] W&B internal server running at pid: 5226
+2021-08-24 12:50:22,113 DEBUG   HandlerThread:5226 [handler.py:handle_request():55] handle_request: check_version
+2021-08-24 12:50:22,113 INFO    WriterThread:5226 [datastore.py:open_for_write():76] open: wandb/run-20210824_125020-smjix3av/run-smjix3av.wandb
+2021-08-24 12:50:22,114 DEBUG   SenderThread:5226 [sender.py:send():90] send: header
+2021-08-24 12:50:22,115 DEBUG   SenderThread:5226 [sender.py:send():90] send: request
+2021-08-24 12:50:22,115 DEBUG   SenderThread:5226 [sender.py:send_request():99] send_request: check_version
+2021-08-24 12:50:22,124 DEBUG   Thread-4  :5226 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): pypi.org:443
+2021-08-24 12:50:22,142 DEBUG   Thread-4  :5226 [connectionpool.py:_make_request():461] https://pypi.org:443 "GET /pypi/wandb/json HTTP/1.1" 200 59576
+2021-08-24 12:50:22,151 DEBUG   SenderThread:5226 [sender.py:send():90] send: run
+2021-08-24 12:50:22,153 INFO    SenderThread:5226 [sender.py:_maybe_setup_resume():281] checking resume status for None/LorentzNet/smjix3av
+2021-08-24 12:50:22,162 DEBUG   SenderThread:5226 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): api.wandb.ai:443
+2021-08-24 12:50:22,277 DEBUG   SenderThread:5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2021-08-24 12:50:22,281 DEBUG   SenderThread:5226 [cmd.py:execute():728] Popen(['git', 'cat-file', '--batch-check'], cwd=/global/u2/d/danieltm/ExaTrkX/Lorentz-Equivariant-GNN, universal_newlines=False, shell=None, istream=<valid stream>)
+2021-08-24 12:50:22,301 DEBUG   SenderThread:5226 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): api.wandb.ai:443
+2021-08-24 12:50:22,477 DEBUG   SenderThread:5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2021-08-24 12:50:22,482 DEBUG   HandlerThread:5226 [handler.py:handle_request():55] handle_request: run_start
+2021-08-24 12:50:22,486 INFO    SenderThread:5226 [dir_watcher.py:__init__():164] watching files in: wandb/run-20210824_125020-smjix3av/files
+2021-08-24 12:50:22,486 INFO    SenderThread:5226 [sender.py:_start_run_threads():490] run started: smjix3av with start time 1629834621
+2021-08-24 12:50:22,486 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:50:22,486 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:50:22,500 DEBUG   HandlerThread:5226 [cmd.py:execute():728] Popen(['git', 'cat-file', '--batch-check'], cwd=/global/u2/d/danieltm/ExaTrkX/Lorentz-Equivariant-GNN, universal_newlines=False, shell=None, istream=<valid stream>)
+2021-08-24 12:50:22,517 DEBUG   HandlerThread:5226 [cmd.py:execute():728] Popen(['git', 'rev-parse', '--show-toplevel'], cwd=/global/u2/d/danieltm/ExaTrkX/Lorentz-Equivariant-GNN, universal_newlines=False, shell=None, istream=None)
+2021-08-24 12:50:22,648 DEBUG   SenderThread:5226 [sender.py:send():90] send: files
+2021-08-24 12:50:22,649 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-metadata.json with policy now
+2021-08-24 12:50:22,659 DEBUG   HandlerThread:5226 [handler.py:handle_request():55] handle_request: status
+2021-08-24 12:50:22,672 DEBUG   SenderThread:5226 [sender.py:send():90] send: request
+2021-08-24 12:50:22,674 DEBUG   SenderThread:5226 [sender.py:send_request():99] send_request: status
+2021-08-24 12:50:22,673 DEBUG   Thread-11 :5226 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): api.wandb.ai:443
+2021-08-24 12:50:22,690 DEBUG   SenderThread:5226 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): api.wandb.ai:443
+2021-08-24 12:50:22,848 DEBUG   SenderThread:5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2021-08-24 12:50:22,850 DEBUG   SenderThread:5226 [sender.py:send():90] send: config
+2021-08-24 12:50:22,862 DEBUG   Thread-11 :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2021-08-24 12:50:22,879 DEBUG   Thread-11 :5226 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): storage.googleapis.com:443
+2021-08-24 12:50:23,328 DEBUG   SenderThread:5226 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): api.wandb.ai:443
+2021-08-24 12:50:23,487 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_created():212] file/dir created: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:50:23,487 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_created():212] file/dir created: wandb/run-20210824_125020-smjix3av/files/wandb-metadata.json
+2021-08-24 12:50:23,487 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_created():212] file/dir created: wandb/run-20210824_125020-smjix3av/files/requirements.txt
+2021-08-24 12:50:23,487 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_created():212] file/dir created: wandb/run-20210824_125020-smjix3av/files/output.log
+2021-08-24 12:50:23,488 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_created():212] file/dir created: wandb/run-20210824_125020-smjix3av/files/LorentzNet/smjix3av/checkpoints
+2021-08-24 12:50:23,488 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_created():212] file/dir created: wandb/run-20210824_125020-smjix3av/files/LorentzNet/smjix3av
+2021-08-24 12:50:23,488 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_created():212] file/dir created: wandb/run-20210824_125020-smjix3av/files/LorentzNet
+2021-08-24 12:50:23,496 DEBUG   SenderThread:5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2021-08-24 12:50:23,642 DEBUG   Thread-11 :5226 [connectionpool.py:_make_request():461] https://storage.googleapis.com:443 "PUT /wandb-production.appspot.com/murnanedaniel/LorentzNet/smjix3av/wandb-metadata.json?Expires=1629921022&GoogleAccessId=wandb-production%40appspot.gserviceaccount.com&Signature=Xae9VX8JOx7KKyWmXoQxDnFl9WwWCLgrV5Romir0bfnp45qStt6WBrSoi1CGIN0xh0fUAoPi4pAwYxUKKURBBx94yGPpOBqnuMl9k1PZeFpuWIRmXPPX9CLiwbBcOAcm1Pp1%2Bpot1AI73RVbiVQ9%2BAvt0CAgLNbx2VSvRA24KuHg6y7ABybAOijbXlcHvw5rn50JjRPXu1bS32fjQIs3ueBawJwlJAjWsm3S9Cjbuw4nlQ3Ad8xO8LIdFRj4F%2BrtaC%2BHgm%2FT8KkukJPZA5bwLHjPxi%2BAkdgQxPSeuapWcgbBhYUr05l03EcCxLmWNOFX9zmO%2BXgp38FLBE1You48Og%3D%3D HTTP/1.1" 200 0
+2021-08-24 12:50:23,644 INFO    Thread-11 :5226 [upload_job.py:push():131] Uploaded file /tmp/tmphbicfsxywandb/fe8fdcbi-wandb-metadata.json
+2021-08-24 12:50:24,487 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/config.yaml
+2021-08-24 12:50:24,487 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/output.log
+2021-08-24 12:50:25,796 DEBUG   Thread-5  :5226 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): api.wandb.ai:443
+2021-08-24 12:50:25,960 DEBUG   Thread-5  :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /files/murnanedaniel/LorentzNet/smjix3av/file_stream HTTP/1.1" 200 None
+2021-08-24 12:50:26,097 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:50:28,208 DEBUG   Thread-5  :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /files/murnanedaniel/LorentzNet/smjix3av/file_stream HTTP/1.1" 200 None
+2021-08-24 12:50:29,862 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:50:29,862 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:50:29,863 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:50:30,490 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:50:30,822 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:50:30,947 DEBUG   Thread-5  :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /files/murnanedaniel/LorentzNet/smjix3av/file_stream HTTP/1.1" 200 None
+2021-08-24 12:50:34,971 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:50:34,971 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:50:34,989 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:50:35,237 DEBUG   Thread-5  :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /files/murnanedaniel/LorentzNet/smjix3av/file_stream HTTP/1.1" 200 None
+2021-08-24 12:50:35,495 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:50:35,531 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:50:37,822 DEBUG   Thread-5  :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /files/murnanedaniel/LorentzNet/smjix3av/file_stream HTTP/1.1" 200 None
+2021-08-24 12:50:37,862 DEBUG   HandlerThread:5226 [handler.py:handle_request():55] handle_request: status
+2021-08-24 12:50:37,863 DEBUG   SenderThread:5226 [sender.py:send():90] send: request
+2021-08-24 12:50:37,863 DEBUG   SenderThread:5226 [sender.py:send_request():99] send_request: status
+2021-08-24 12:50:37,883 DEBUG   SenderThread:5226 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): api.wandb.ai:443
+2021-08-24 12:50:38,010 DEBUG   SenderThread:5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2021-08-24 12:50:40,283 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:50:40,416 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:50:40,416 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:50:40,417 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:50:40,498 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:50:40,543 DEBUG   Thread-5  :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /files/murnanedaniel/LorentzNet/smjix3av/file_stream HTTP/1.1" 200 None
+2021-08-24 12:50:42,669 DEBUG   Thread-5  :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /files/murnanedaniel/LorentzNet/smjix3av/file_stream HTTP/1.1" 200 None
+2021-08-24 12:50:44,956 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:50:45,188 DEBUG   Thread-5  :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /files/murnanedaniel/LorentzNet/smjix3av/file_stream HTTP/1.1" 200 None
+2021-08-24 12:50:45,544 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:50:45,544 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:50:45,547 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:50:46,507 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:50:47,666 DEBUG   Thread-5  :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /files/murnanedaniel/LorentzNet/smjix3av/file_stream HTTP/1.1" 200 None
+2021-08-24 12:50:49,655 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:50:49,781 DEBUG   Thread-5  :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /files/murnanedaniel/LorentzNet/smjix3av/file_stream HTTP/1.1" 200 None
+2021-08-24 12:50:50,654 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:50:50,654 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:50:50,655 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:50:51,517 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:50:52,782 DEBUG   Thread-5  :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /files/murnanedaniel/LorentzNet/smjix3av/file_stream HTTP/1.1" 200 None
+2021-08-24 12:50:53,014 DEBUG   HandlerThread:5226 [handler.py:handle_request():55] handle_request: status
+2021-08-24 12:50:53,014 DEBUG   SenderThread:5226 [sender.py:send():90] send: request
+2021-08-24 12:50:53,014 DEBUG   SenderThread:5226 [sender.py:send_request():99] send_request: status
+2021-08-24 12:50:53,030 DEBUG   SenderThread:5226 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): api.wandb.ai:443
+2021-08-24 12:50:53,153 DEBUG   SenderThread:5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2021-08-24 12:50:54,313 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:50:55,974 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:50:55,975 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:50:55,992 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:50:56,124 DEBUG   Thread-5  :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /files/murnanedaniel/LorentzNet/smjix3av/file_stream HTTP/1.1" 200 None
+2021-08-24 12:50:56,522 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:50:59,045 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:50:59,475 DEBUG   Thread-5  :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /files/murnanedaniel/LorentzNet/smjix3av/file_stream HTTP/1.1" 200 None
+2021-08-24 12:51:01,199 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:51:01,199 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:51:01,216 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:51:01,340 DEBUG   Thread-5  :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /files/murnanedaniel/LorentzNet/smjix3av/file_stream HTTP/1.1" 200 None
+2021-08-24 12:51:01,528 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:51:03,798 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:51:03,922 DEBUG   Thread-5  :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /files/murnanedaniel/LorentzNet/smjix3av/file_stream HTTP/1.1" 200 None
+2021-08-24 12:51:06,478 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:51:06,478 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:51:06,487 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:51:06,531 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:51:06,625 DEBUG   Thread-5  :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /files/murnanedaniel/LorentzNet/smjix3av/file_stream HTTP/1.1" 200 None
+2021-08-24 12:51:08,156 DEBUG   HandlerThread:5226 [handler.py:handle_request():55] handle_request: status
+2021-08-24 12:51:08,157 DEBUG   SenderThread:5226 [sender.py:send():90] send: request
+2021-08-24 12:51:08,157 DEBUG   SenderThread:5226 [sender.py:send_request():99] send_request: status
+2021-08-24 12:51:08,169 DEBUG   SenderThread:5226 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): api.wandb.ai:443
+2021-08-24 12:51:08,284 DEBUG   SenderThread:5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2021-08-24 12:51:08,551 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:51:08,666 DEBUG   Thread-5  :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /files/murnanedaniel/LorentzNet/smjix3av/file_stream HTTP/1.1" 200 None
+2021-08-24 12:51:11,730 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:51:11,730 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:51:11,739 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:51:11,848 DEBUG   Thread-5  :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /files/murnanedaniel/LorentzNet/smjix3av/file_stream HTTP/1.1" 200 None
+2021-08-24 12:51:12,534 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:51:13,255 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:51:15,370 DEBUG   Thread-5  :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /files/murnanedaniel/LorentzNet/smjix3av/file_stream HTTP/1.1" 200 None
+2021-08-24 12:51:16,800 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:51:16,800 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:51:16,801 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:51:17,537 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:51:17,952 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:51:18,064 DEBUG   Thread-5  :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /files/murnanedaniel/LorentzNet/smjix3av/file_stream HTTP/1.1" 200 None
+2021-08-24 12:51:21,811 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:51:21,812 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:51:21,813 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:51:22,540 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:51:22,624 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:51:23,300 DEBUG   HandlerThread:5226 [handler.py:handle_request():55] handle_request: status
+2021-08-24 12:51:23,301 DEBUG   SenderThread:5226 [sender.py:send():90] send: request
+2021-08-24 12:51:23,301 DEBUG   SenderThread:5226 [sender.py:send_request():99] send_request: status
+2021-08-24 12:51:23,314 DEBUG   SenderThread:5226 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): api.wandb.ai:443
+2021-08-24 12:51:23,437 DEBUG   SenderThread:5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2021-08-24 12:51:27,230 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:51:27,230 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:51:27,231 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:51:27,267 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:51:27,543 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:51:32,089 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:51:32,204 DEBUG   Thread-5  :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /files/murnanedaniel/LorentzNet/smjix3av/file_stream HTTP/1.1" 200 None
+2021-08-24 12:51:32,476 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:51:32,477 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:51:32,477 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:51:32,545 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:51:36,785 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:51:37,768 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:51:37,768 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:51:37,771 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:51:38,445 DEBUG   HandlerThread:5226 [handler.py:handle_request():55] handle_request: status
+2021-08-24 12:51:38,446 DEBUG   SenderThread:5226 [sender.py:send():90] send: request
+2021-08-24 12:51:38,446 DEBUG   SenderThread:5226 [sender.py:send_request():99] send_request: status
+2021-08-24 12:51:38,462 DEBUG   SenderThread:5226 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): api.wandb.ai:443
+2021-08-24 12:51:38,549 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:51:38,604 DEBUG   SenderThread:5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2021-08-24 12:51:41,524 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:51:43,445 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:51:43,445 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:51:43,461 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:51:43,552 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:51:43,643 DEBUG   Thread-5  :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /files/murnanedaniel/LorentzNet/smjix3av/file_stream HTTP/1.1" 200 None
+2021-08-24 12:51:46,242 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:51:48,171 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:51:48,172 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:51:48,172 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:51:48,572 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:51:50,978 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:51:52,837 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:51:52,837 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:51:52,838 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:51:53,578 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:51:53,616 DEBUG   HandlerThread:5226 [handler.py:handle_request():55] handle_request: status
+2021-08-24 12:51:53,616 DEBUG   SenderThread:5226 [sender.py:send():90] send: request
+2021-08-24 12:51:53,617 DEBUG   SenderThread:5226 [sender.py:send_request():99] send_request: status
+2021-08-24 12:51:53,629 DEBUG   SenderThread:5226 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): api.wandb.ai:443
+2021-08-24 12:51:53,752 DEBUG   SenderThread:5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2021-08-24 12:51:55,729 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:51:55,846 DEBUG   Thread-5  :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /files/murnanedaniel/LorentzNet/smjix3av/file_stream HTTP/1.1" 200 None
+2021-08-24 12:51:57,733 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:51:57,733 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:51:57,733 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:51:58,581 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:52:00,480 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:52:02,446 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:52:02,446 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:52:02,447 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:52:02,583 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:52:05,261 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:52:07,142 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:52:07,142 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:52:07,159 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:52:07,257 DEBUG   Thread-5  :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /files/murnanedaniel/LorentzNet/smjix3av/file_stream HTTP/1.1" 200 None
+2021-08-24 12:52:08,103 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:52:08,755 DEBUG   HandlerThread:5226 [handler.py:handle_request():55] handle_request: status
+2021-08-24 12:52:08,755 DEBUG   SenderThread:5226 [sender.py:send():90] send: request
+2021-08-24 12:52:08,755 DEBUG   SenderThread:5226 [sender.py:send_request():99] send_request: status
+2021-08-24 12:52:08,767 DEBUG   SenderThread:5226 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): api.wandb.ai:443
+2021-08-24 12:52:08,880 DEBUG   SenderThread:5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2021-08-24 12:52:10,586 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:52:14,799 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:52:14,799 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:52:14,800 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:52:15,107 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:52:15,108 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/output.log
+2021-08-24 12:52:15,108 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_created():212] file/dir created: wandb/run-20210824_125020-smjix3av/files/LorentzNet/smjix3av/checkpoints/epoch=0-step=999.ckpt
+2021-08-24 12:52:15,108 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/LorentzNet/smjix3av/checkpoints
+2021-08-24 12:52:15,817 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:52:20,571 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:52:20,721 DEBUG   Thread-5  :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /files/murnanedaniel/LorentzNet/smjix3av/file_stream HTTP/1.1" 200 None
+2021-08-24 12:52:21,060 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:52:21,060 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:52:21,061 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:52:21,111 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:52:23,884 DEBUG   HandlerThread:5226 [handler.py:handle_request():55] handle_request: status
+2021-08-24 12:52:23,884 DEBUG   SenderThread:5226 [sender.py:send():90] send: request
+2021-08-24 12:52:23,884 DEBUG   SenderThread:5226 [sender.py:send_request():99] send_request: status
+2021-08-24 12:52:23,897 DEBUG   SenderThread:5226 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): api.wandb.ai:443
+2021-08-24 12:52:24,020 DEBUG   SenderThread:5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2021-08-24 12:52:25,371 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:52:26,353 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:52:26,353 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:52:26,354 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:52:27,114 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:52:30,206 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:52:31,472 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:52:31,473 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:52:31,489 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:52:31,631 DEBUG   Thread-5  :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /files/murnanedaniel/LorentzNet/smjix3av/file_stream HTTP/1.1" 200 None
+2021-08-24 12:52:32,117 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:52:34,856 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:52:36,962 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:52:36,962 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:52:36,965 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:52:37,145 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:52:39,024 DEBUG   HandlerThread:5226 [handler.py:handle_request():55] handle_request: status
+2021-08-24 12:52:39,024 DEBUG   SenderThread:5226 [sender.py:send():90] send: request
+2021-08-24 12:52:39,024 DEBUG   SenderThread:5226 [sender.py:send_request():99] send_request: status
+2021-08-24 12:52:39,047 DEBUG   SenderThread:5226 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): api.wandb.ai:443
+2021-08-24 12:52:39,166 DEBUG   SenderThread:5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2021-08-24 12:52:39,594 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:52:42,141 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:52:42,141 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:52:42,155 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:52:42,155 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:52:42,261 DEBUG   Thread-5  :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /files/murnanedaniel/LorentzNet/smjix3av/file_stream HTTP/1.1" 200 None
+2021-08-24 12:52:43,156 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:52:44,307 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:52:47,433 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:52:47,434 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:52:47,435 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:52:48,159 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:52:48,992 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:52:52,652 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:52:52,653 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:52:52,658 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:52:52,772 DEBUG   Thread-5  :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /files/murnanedaniel/LorentzNet/smjix3av/file_stream HTTP/1.1" 200 None
+2021-08-24 12:52:53,162 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:52:53,682 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:52:54,169 DEBUG   HandlerThread:5226 [handler.py:handle_request():55] handle_request: status
+2021-08-24 12:52:54,169 DEBUG   SenderThread:5226 [sender.py:send():90] send: request
+2021-08-24 12:52:54,169 DEBUG   SenderThread:5226 [sender.py:send_request():99] send_request: status
+2021-08-24 12:52:54,182 DEBUG   SenderThread:5226 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): api.wandb.ai:443
+2021-08-24 12:52:54,300 DEBUG   SenderThread:5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2021-08-24 12:52:58,033 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:52:58,033 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:52:58,034 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:52:58,165 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:52:58,360 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:53:03,093 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:53:03,412 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:53:03,412 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:53:03,413 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:53:03,725 DEBUG   Thread-5  :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /files/murnanedaniel/LorentzNet/smjix3av/file_stream HTTP/1.1" 200 None
+2021-08-24 12:53:04,168 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:53:07,789 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:53:08,728 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:53:08,728 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:53:08,730 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:53:09,171 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:53:09,303 DEBUG   HandlerThread:5226 [handler.py:handle_request():55] handle_request: status
+2021-08-24 12:53:09,304 DEBUG   SenderThread:5226 [sender.py:send():90] send: request
+2021-08-24 12:53:09,304 DEBUG   SenderThread:5226 [sender.py:send_request():99] send_request: status
+2021-08-24 12:53:09,317 DEBUG   SenderThread:5226 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): api.wandb.ai:443
+2021-08-24 12:53:09,445 DEBUG   SenderThread:5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2021-08-24 12:53:12,490 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:53:14,122 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:53:14,122 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:53:14,139 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:53:14,174 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:53:14,243 DEBUG   Thread-5  :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /files/murnanedaniel/LorentzNet/smjix3av/file_stream HTTP/1.1" 200 None
+2021-08-24 12:53:17,258 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:53:19,086 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:53:19,087 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:53:19,087 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:53:19,177 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:53:21,974 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:53:24,449 DEBUG   HandlerThread:5226 [handler.py:handle_request():55] handle_request: status
+2021-08-24 12:53:24,450 DEBUG   SenderThread:5226 [sender.py:send():90] send: request
+2021-08-24 12:53:24,450 DEBUG   SenderThread:5226 [sender.py:send_request():99] send_request: status
+2021-08-24 12:53:24,467 DEBUG   SenderThread:5226 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): api.wandb.ai:443
+2021-08-24 12:53:24,598 DEBUG   SenderThread:5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2021-08-24 12:53:24,600 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:53:24,600 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:53:24,613 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:53:24,730 DEBUG   Thread-5  :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /files/murnanedaniel/LorentzNet/smjix3av/file_stream HTTP/1.1" 200 None
+2021-08-24 12:53:25,181 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:53:26,679 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:53:29,974 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:53:29,974 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:53:29,975 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:53:30,184 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:53:31,448 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:53:35,145 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:53:35,145 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:53:35,154 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:53:35,187 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:53:35,264 DEBUG   Thread-5  :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /files/murnanedaniel/LorentzNet/smjix3av/file_stream HTTP/1.1" 200 None
+2021-08-24 12:53:36,176 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:53:39,613 DEBUG   HandlerThread:5226 [handler.py:handle_request():55] handle_request: status
+2021-08-24 12:53:39,613 DEBUG   SenderThread:5226 [sender.py:send():90] send: request
+2021-08-24 12:53:39,613 DEBUG   SenderThread:5226 [sender.py:send_request():99] send_request: status
+2021-08-24 12:53:39,626 DEBUG   SenderThread:5226 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): api.wandb.ai:443
+2021-08-24 12:53:39,743 DEBUG   SenderThread:5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2021-08-24 12:53:40,206 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:53:40,206 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:53:40,207 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:53:40,841 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:53:41,190 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:53:45,105 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:53:45,105 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:53:45,106 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:53:45,193 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:53:45,622 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:53:45,741 DEBUG   Thread-5  :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /files/murnanedaniel/LorentzNet/smjix3av/file_stream HTTP/1.1" 200 None
+2021-08-24 12:53:49,908 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:53:49,908 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:53:49,911 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:53:50,221 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:53:50,293 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:53:54,650 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:53:54,651 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:53:54,654 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:53:54,751 DEBUG   HandlerThread:5226 [handler.py:handle_request():55] handle_request: status
+2021-08-24 12:53:54,751 DEBUG   SenderThread:5226 [sender.py:send():90] send: request
+2021-08-24 12:53:54,751 DEBUG   SenderThread:5226 [sender.py:send_request():99] send_request: status
+2021-08-24 12:53:54,764 DEBUG   SenderThread:5226 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): api.wandb.ai:443
+2021-08-24 12:53:54,883 DEBUG   SenderThread:5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2021-08-24 12:53:55,036 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:53:55,224 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:53:59,659 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:53:59,659 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:53:59,683 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:53:59,752 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:53:59,787 DEBUG   Thread-5  :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /files/murnanedaniel/LorentzNet/smjix3av/file_stream HTTP/1.1" 200 None
+2021-08-24 12:54:00,226 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:54:04,477 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:54:07,204 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:54:07,204 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:54:07,204 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:54:07,230 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:54:07,231 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_created():212] file/dir created: wandb/run-20210824_125020-smjix3av/files/LorentzNet/smjix3av/checkpoints/epoch=1-step=1999.ckpt
+2021-08-24 12:54:07,231 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/LorentzNet/smjix3av/checkpoints
+2021-08-24 12:54:09,590 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:54:09,886 DEBUG   HandlerThread:5226 [handler.py:handle_request():55] handle_request: status
+2021-08-24 12:54:09,886 DEBUG   SenderThread:5226 [sender.py:send():90] send: request
+2021-08-24 12:54:09,887 DEBUG   SenderThread:5226 [sender.py:send_request():99] send_request: status
+2021-08-24 12:54:09,910 DEBUG   SenderThread:5226 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): api.wandb.ai:443
+2021-08-24 12:54:10,031 DEBUG   SenderThread:5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2021-08-24 12:54:13,449 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:54:13,450 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:54:13,480 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:54:13,595 DEBUG   Thread-5  :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /files/murnanedaniel/LorentzNet/smjix3av/file_stream HTTP/1.1" 200 None
+2021-08-24 12:54:14,239 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:54:14,335 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:54:18,549 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:54:18,549 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:54:18,551 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:54:19,084 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:54:19,242 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:54:23,754 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:54:23,754 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:54:23,770 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:54:23,875 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:54:24,244 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:54:24,848 DEBUG   Thread-5  :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /files/murnanedaniel/LorentzNet/smjix3av/file_stream HTTP/1.1" 200 None
+2021-08-24 12:54:25,046 DEBUG   HandlerThread:5226 [handler.py:handle_request():55] handle_request: status
+2021-08-24 12:54:25,046 DEBUG   SenderThread:5226 [sender.py:send():90] send: request
+2021-08-24 12:54:25,046 DEBUG   SenderThread:5226 [sender.py:send_request():99] send_request: status
+2021-08-24 12:54:25,055 DEBUG   SenderThread:5226 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): api.wandb.ai:443
+2021-08-24 12:54:25,186 DEBUG   SenderThread:5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2021-08-24 12:54:28,559 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:54:29,092 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:54:29,092 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:54:29,093 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:54:29,256 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:54:33,275 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:54:34,265 DEBUG   SenderThread:5226 [sender.py:send():90] send: history
+2021-08-24 12:54:34,265 DEBUG   SenderThread:5226 [sender.py:send():90] send: summary
+2021-08-24 12:54:34,277 INFO    SenderThread:5226 [sender.py:_save_file():568] saving file wandb-summary.json with policy end
+2021-08-24 12:54:34,389 DEBUG   Thread-5  :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /files/murnanedaniel/LorentzNet/smjix3av/file_stream HTTP/1.1" 200 None
+2021-08-24 12:54:35,277 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:54:37,927 DEBUG   SenderThread:5226 [sender.py:send():90] send: stats
+2021-08-24 12:54:38,646 WARNING MainThread:5226 [internal.py:wandb_internal():117] Internal process interrupt: 1
+2021-08-24 12:54:38,740 DEBUG   HandlerThread:5226 [handler.py:handle_request():55] handle_request: pause
+2021-08-24 12:54:38,741 INFO    HandlerThread:5226 [handler.py:handle_request_pause():226] stopping system metrics thread
+2021-08-24 12:54:38,828 WARNING MainThread:5226 [internal.py:wandb_internal():117] Internal process interrupt: 2
+2021-08-24 12:54:38,828 ERROR   MainThread:5226 [internal.py:wandb_internal():120] Internal process interrupted.
+2021-08-24 12:54:38,861 INFO    HandlerThread:5226 [handler.py:finish():271] shutting down handler
+2021-08-24 12:54:39,279 INFO    Thread-8  :5226 [dir_watcher.py:_on_file_modified():225] file/dir modified: wandb/run-20210824_125020-smjix3av/files/output.log
+2021-08-24 12:54:39,660 INFO    SenderThread:5226 [sender.py:finish():630] shutting down sender
+2021-08-24 12:54:39,660 INFO    WriterThread:5226 [datastore.py:close():257] close: wandb/run-20210824_125020-smjix3av/run-smjix3av.wandb
+2021-08-24 12:54:39,660 INFO    SenderThread:5226 [dir_watcher.py:finish():278] shutting down directory watcher
+2021-08-24 12:54:40,280 INFO    SenderThread:5226 [dir_watcher.py:finish():308] scan: wandb/run-20210824_125020-smjix3av/files
+2021-08-24 12:54:40,280 INFO    SenderThread:5226 [dir_watcher.py:finish():314] scan save: wandb/run-20210824_125020-smjix3av/files/wandb-metadata.json wandb-metadata.json
+2021-08-24 12:54:40,281 INFO    SenderThread:5226 [dir_watcher.py:finish():314] scan save: wandb/run-20210824_125020-smjix3av/files/config.yaml config.yaml
+2021-08-24 12:54:40,281 INFO    SenderThread:5226 [dir_watcher.py:finish():314] scan save: wandb/run-20210824_125020-smjix3av/files/requirements.txt requirements.txt
+2021-08-24 12:54:40,286 INFO    SenderThread:5226 [dir_watcher.py:finish():314] scan save: wandb/run-20210824_125020-smjix3av/files/wandb-summary.json wandb-summary.json
+2021-08-24 12:54:40,295 INFO    SenderThread:5226 [dir_watcher.py:finish():314] scan save: wandb/run-20210824_125020-smjix3av/files/output.log output.log
+2021-08-24 12:54:40,296 DEBUG   Thread-12 :5226 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): api.wandb.ai:443
+2021-08-24 12:54:40,296 INFO    SenderThread:5226 [dir_watcher.py:finish():314] scan save: wandb/run-20210824_125020-smjix3av/files/LorentzNet/smjix3av/checkpoints/epoch=1-step=1999.ckpt LorentzNet/smjix3av/checkpoints/epoch=1-step=1999.ckpt
+2021-08-24 12:54:40,296 INFO    SenderThread:5226 [file_pusher.py:finish():169] shutting down file pusher
+2021-08-24 12:54:40,296 INFO    SenderThread:5226 [file_pusher.py:join():174] waiting for file pusher
+2021-08-24 12:54:40,324 DEBUG   Thread-13 :5226 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): api.wandb.ai:443
+2021-08-24 12:54:40,338 DEBUG   Thread-16 :5226 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): api.wandb.ai:443
+2021-08-24 12:54:40,339 DEBUG   Thread-15 :5226 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): api.wandb.ai:443
+2021-08-24 12:54:40,350 DEBUG   Thread-14 :5226 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): api.wandb.ai:443
+2021-08-24 12:54:40,469 DEBUG   Thread-13 :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2021-08-24 12:54:40,481 DEBUG   Thread-12 :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2021-08-24 12:54:40,481 DEBUG   Thread-13 :5226 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): storage.googleapis.com:443
+2021-08-24 12:54:40,483 DEBUG   Thread-16 :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2021-08-24 12:54:40,493 DEBUG   Thread-15 :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2021-08-24 12:54:40,500 DEBUG   Thread-12 :5226 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): storage.googleapis.com:443
+2021-08-24 12:54:40,512 DEBUG   Thread-14 :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /graphql HTTP/1.1" 200 None
+2021-08-24 12:54:40,514 DEBUG   Thread-16 :5226 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): storage.googleapis.com:443
+2021-08-24 12:54:40,514 DEBUG   Thread-15 :5226 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): storage.googleapis.com:443
+2021-08-24 12:54:40,523 DEBUG   Thread-14 :5226 [connectionpool.py:_new_conn():975] Starting new HTTPS connection (1): storage.googleapis.com:443
+2021-08-24 12:54:40,860 DEBUG   Thread-13 :5226 [connectionpool.py:_make_request():461] https://storage.googleapis.com:443 "PUT /wandb-production.appspot.com/murnanedaniel/LorentzNet/smjix3av/requirements.txt?Expires=1629921280&GoogleAccessId=wandb-production%40appspot.gserviceaccount.com&Signature=miaITtOGJJBo86ziMsBwhYM1Cj4MR1kdoNM%2FWAs6lywx2cCByFf3wsnkvTtzJERoH9NOwVxbplE8mNt8kX54jKAV57wJm5lYlbtT2qSClUON9Vsp%2FEqM%2BdSWnuMNPzIgJ%2FmsNDFfVukfByIYLprPxdh%2BP6ZKWmInYmR%2FlIQKo2yKWJbKw6zuQVXzVhXrDvnlC6jPZcY1DMYp%2FNs%2BlLMKD8mwbJJwcLtBASDTO55zphGVds0Cz%2B18REqoIcOZ5MdU8W2cZxkQWwT9rPNIya7dSDxFb8B8diN53%2FpdWw3JqoectmtfVVQs%2BiFYI1tFPRpoe7mTTqaK1dhf8a9jyrSCag%3D%3D HTTP/1.1" 200 0
+2021-08-24 12:54:40,862 INFO    Thread-13 :5226 [upload_job.py:push():131] Uploaded file wandb/run-20210824_125020-smjix3av/files/requirements.txt
+2021-08-24 12:54:40,899 DEBUG   Thread-12 :5226 [connectionpool.py:_make_request():461] https://storage.googleapis.com:443 "PUT /wandb-production.appspot.com/murnanedaniel/LorentzNet/smjix3av/config.yaml?Expires=1629921280&GoogleAccessId=wandb-production%40appspot.gserviceaccount.com&Signature=FO14xdCfY1zhu8q%2FQZpUSCsONevKsuu%2Bp57IWhRhFmoqhm4tKczLfm5zMSjjqu8wfjiObLcPOsb5pEu2ul6dhuxRZs58pSIatdqgckCzFci%2BH%2FVEb%2F1KDbie%2FXSxdGOJJ9DVhrps%2BWFlsQ4mY9OeTQjWtEaeL1tRYjhKMlzYFu0pvtbbaNRndLAnHMyeodjoWQ%2Bp8tQMcwMxBHE9x%2FIYNvouJA8RQuMSQFPBSksG8x4xEZEkD1reRCR9A5yZtsx%2BX4ENrFYLi8IuB29aN%2Bj3cZk%2B1e3VX8gMNfTUi64FJi7Ox8Ob0VQIvsxMllTD7zJIY%2BhWt%2FOxAcQdW09bRIqoNQ%3D%3D HTTP/1.1" 200 0
+2021-08-24 12:54:40,900 INFO    Thread-12 :5226 [upload_job.py:push():131] Uploaded file wandb/run-20210824_125020-smjix3av/files/config.yaml
+2021-08-24 12:54:40,904 DEBUG   Thread-14 :5226 [connectionpool.py:_make_request():461] https://storage.googleapis.com:443 "PUT /wandb-production.appspot.com/murnanedaniel/LorentzNet/smjix3av/wandb-summary.json?Expires=1629921280&GoogleAccessId=wandb-production%40appspot.gserviceaccount.com&Signature=Vuu5hrj0qvuJbw%2BbDEK6nZU3ybTr9pgOKsOM15W0vX3BPMOZlmdPudhUnKGW5HAp0ZirBySQjBQzVWkf1B3EDAT1feHkGEGcCQpTjPUytoCdM2jabo%2F1s13Oc96tJWPNtjh8KQkubCFG8dM3u8fQ%2FyLMgAiw16dNcALkO96sVyMN3WljpoSetgdGasW28klPzISnRdcdcirXxhIp1uBnnQ4dt2LxDt6GfXzM6mPvQBRzbvgrLei9IvpVHwdQaL7IbrXXBgMNEVbvBV1%2BahXDMiITuqrAV%2FLhkpk24HXZcr9%2FItbjhxrFiNSwHD0iN48HQZec1LdW0qrmTcenRBOonw%3D%3D HTTP/1.1" 200 0
+2021-08-24 12:54:40,906 INFO    Thread-14 :5226 [upload_job.py:push():131] Uploaded file wandb/run-20210824_125020-smjix3av/files/wandb-summary.json
+2021-08-24 12:54:40,906 DEBUG   Thread-15 :5226 [connectionpool.py:_make_request():461] https://storage.googleapis.com:443 "PUT /wandb-production.appspot.com/murnanedaniel/LorentzNet/smjix3av/output.log?Expires=1629921280&GoogleAccessId=wandb-production%40appspot.gserviceaccount.com&Signature=XxQfCE%2BUVRaW3hOV%2F%2BQTXaNdl3kfQASX7TGR%2Btcf1yatgd7cGhsPiB8tPblDngJ68CPCtNhkF5rFmaazuAWdz7%2B0Y64it9ozgKSEr7s748bSV60BqqV%2FXmfOe6KPjzQpCK1idNOLJQ0fTqfMdz6deftjhRcdLKIIpNBxm%2FdnvnxfS1qmuqlyt8zua4Zxy3GQAhx0VByAS6lo7%2BaPA1ya0F1aPAOH55MtB6lWZToo5HO6GSjgIS1Eb8dzueil1aY%2Flys62nOz9UAHFdGmet10r7Hsi2JpM47rL%2BJqzRajLQ7WvObOB37v854jnUFIyYfcC0ZERYH9Y0r4NeVvCEl9EQ%3D%3D HTTP/1.1" 200 0
+2021-08-24 12:54:40,907 INFO    Thread-15 :5226 [upload_job.py:push():131] Uploaded file wandb/run-20210824_125020-smjix3av/files/output.log
+2021-08-24 12:54:41,394 DEBUG   Thread-16 :5226 [connectionpool.py:_make_request():461] https://storage.googleapis.com:443 "PUT /wandb-production.appspot.com/murnanedaniel/LorentzNet/smjix3av/LorentzNet/smjix3av/checkpoints/epoch=1-step=1999.ckpt?Expires=1629921280&GoogleAccessId=wandb-production%40appspot.gserviceaccount.com&Signature=lxlqBRUMA1GU14vgFwuSW8rq8xfQZhJlbOvfZM9kGsmLUtQSBweytejabCrA4ku6MXCPtog8vAYUqdWNfSAbgd3UxlnRdlqUl%2BAgXrZiIjyUvAdt%2FJKqNLlVcEWBqe1lyzqHKfp3lcc1gOsernwtnc5fOhaFjQsNoBIEMSCM4qHziJSGFfRxBPLzLWkHGJv1y45wlmBCGHah90sVzTpaSYFUMzA5ZB2KNL2Q%2FdB9vnmTQbTNyxqoe%2FfDvULye94EyifV6xcfzDvOQaD2LipXJMEzXr6HDce3FvyWpZRKCMAAzyKmC5ZwDuIQF7jZvCLyzOnthueWrcKhBcPrJCZxaw%3D%3D HTTP/1.1" 200 0
+2021-08-24 12:54:41,397 INFO    Thread-16 :5226 [upload_job.py:push():131] Uploaded file wandb/run-20210824_125020-smjix3av/files/LorentzNet/smjix3av/checkpoints/epoch=1-step=1999.ckpt
+2021-08-24 12:54:41,906 DEBUG   Thread-5  :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /files/murnanedaniel/LorentzNet/smjix3av/file_stream HTTP/1.1" 200 None
+2021-08-24 12:54:42,000 DEBUG   Thread-5  :5226 [connectionpool.py:_make_request():461] https://api.wandb.ai:443 "POST /files/murnanedaniel/LorentzNet/smjix3av/file_stream HTTP/1.1" 200 None
+2021-08-24 12:54:42,002 INFO    MainThread:5226 [internal.py:handle_exit():138] Internal process exited

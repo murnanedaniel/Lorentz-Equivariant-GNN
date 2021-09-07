@@ -7,6 +7,41 @@ import matplotlib.pyplot as plt
 
 import torch
 from torch.utils.data import Dataset, DataLoader
+from torch import nn
+
+
+def make_mlp(
+    input_size,
+    sizes,
+    hidden_activation="ReLU",
+    output_activation="ReLU",
+    layer_norm=False,
+    batch_norm=False
+):
+    """Construct an MLP with specified fully-connected layers."""
+    hidden_activation = getattr(nn, hidden_activation)
+    if output_activation is not None:
+        output_activation = getattr(nn, output_activation)
+    layers = []
+    n_layers = len(sizes)
+    sizes = [input_size] + sizes
+    # Hidden layers
+    for i in range(n_layers - 1):
+        layers.append(nn.Linear(sizes[i], sizes[i + 1]))
+        if layer_norm:
+            layers.append(nn.LayerNorm(sizes[i + 1]))
+        if batch_norm:
+            layers.append(nn.BatchNorm1d(sizes[i + 1]))
+        layers.append(hidden_activation())
+    # Final layer
+    layers.append(nn.Linear(sizes[-2], sizes[-1]))
+    if output_activation is not None:
+        if layer_norm:
+            layers.append(nn.LayerNorm(sizes[-1]))
+        if batch_norm:
+            layers.append(nn.BatchNorm1d(sizes[-1]))
+        layers.append(output_activation())
+    return nn.Sequential(*layers)
 
 
 def get_four_momenta(jet_tuple):
@@ -58,19 +93,29 @@ class JetDataset(Dataset):
 
 
 """
-Returns an array of edge links corresponding to a fully-connected graph
+Returns an array of edge links corresponding to a fully-connected graph - OLD VERSION
+"""
+# def get_edges(n_nodes):
+#     rows, cols = [], []
+#     for i in range(n_nodes):
+#         for j in range(n_nodes):
+#             if i != j:
+#                 rows.append(i)
+#                 cols.append(j)
+
+#     edges = [rows, cols]
+#     return torch.tensor(edges)
+
+"""
+Returns an array of edge links corresponding to a fully-connected graph - NEW VERSION
 """
 def get_edges(n_nodes):
-    rows, cols = [], []
-    for i in range(n_nodes):
-        for j in range(n_nodes):
-            if i != j:
-                rows.append(i)
-                cols.append(j)
-
-    edges = [rows, cols]
-    return torch.tensor(edges)
-
+    
+    node_list = torch.arange(n_nodes)
+    edges = torch.combinations(node_list, r=2).T
+    bidirectional_edges = torch.cat([edges, edges.flip(0)], axis=1)
+    
+    return bidirectional_edges
 
 if __name__ == '__main__':
     test_file = 'test.h5'

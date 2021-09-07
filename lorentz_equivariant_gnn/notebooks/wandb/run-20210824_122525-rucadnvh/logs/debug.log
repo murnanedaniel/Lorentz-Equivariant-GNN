@@ -1,0 +1,23 @@
+2021-08-24 12:25:25,702 INFO    MainThread:5239 [wandb_setup.py:_flush():68] setting env: {}
+2021-08-24 12:25:25,702 INFO    MainThread:5239 [wandb_setup.py:_flush():68] multiprocessing start_methods=fork,spawn,forkserver
+2021-08-24 12:25:25,703 INFO    MainThread:5239 [wandb_setup.py:_flush():68] setting login settings: {}
+2021-08-24 12:25:25,703 INFO    MainThread:5239 [wandb_setup.py:_flush():68] configuring jupyter hooks <wandb.sdk.wandb_init._WandbInit object at 0x2aab4e10cb90>
+2021-08-24 12:25:25,703 INFO    MainThread:5239 [wandb_init.py:_log_setup():301] Logging user logs to wandb/run-20210824_122525-rucadnvh/logs/debug.log
+2021-08-24 12:25:25,703 INFO    MainThread:5239 [wandb_init.py:_log_setup():302] Logging internal logs to wandb/run-20210824_122525-rucadnvh/logs/debug-internal.log
+2021-08-24 12:25:27,288 INFO    MainThread:5239 [wandb_run.py:_console_start():1322] atexit reg
+2021-08-24 12:25:27,289 INFO    MainThread:5239 [wandb_run.py:_redirect():1192] redirect: SettingsConsole.WRAP
+2021-08-24 12:25:27,289 INFO    MainThread:5239 [wandb_run.py:_redirect():1223] Wrapping output streams.
+2021-08-24 12:25:27,289 INFO    MainThread:5239 [wandb_run.py:_redirect():1239] Redirects installed.
+2021-08-24 12:25:27,290 INFO    MainThread:5239 [wandb_run.py:_config_callback():654] config_cb None None {'_wandb': {'cli_version': '0.10.9', 'python_version': '3.7.7', 'is_jupyter_run': True, 'is_kaggle_kernel': False, 'framework': 'torch'}, 'input_dir': '/global/cscratch1/sd/danieltm/ExaTrkX/top_tagging/raw_input/', 'data_split': [100, 100], 'n_epochs': 20, 'lr': 0.001, 'factor': 0.3, 'patience': 10, 'input_feature_dim': 1, 'message_dim': 32, 'output_feature_dim': 2, 'edge_feature_dim': 0, 'n_layers': 6, 'activation': 'SiLU'}
+2021-08-24 12:25:29,251 INFO    MainThread:5239 [wandb_init.py:_pause_backend():222] pausing backend
+2021-08-24 12:26:29,921 INFO    MainThread:5239 [wandb_init.py:_resume_backend():227] resuming backend
+2021-08-24 12:26:29,930 INFO    MainThread:5239 [wandb_init.py:_pause_backend():222] pausing backend
+2021-08-24 12:26:30,212 INFO    MainThread:5239 [wandb_init.py:_resume_backend():227] resuming backend
+2021-08-24 12:26:40,301 INFO    MainThread:5239 [wandb_run.py:_config_callback():654] config_cb None None {'_wandb': {'cli_version': '0.10.9', 'python_version': '3.7.7', 'is_jupyter_run': True, 'is_kaggle_kernel': False, 'framework': 'torch'}, 'input_dir': '/global/cscratch1/sd/danieltm/ExaTrkX/top_tagging/raw_input/', 'data_split': [100, 100], 'n_epochs': 20, 'lr': 0.001, 'factor': 0.3, 'patience': 10, 'input_feature_dim': 1, 'message_dim': 32, 'output_feature_dim': 2, 'edge_feature_dim': 0, 'n_layers': 6, 'activation': 'SiLU'}
+2021-08-24 12:26:41,378 INFO    MainThread:5239 [wandb_init.py:_pause_backend():222] pausing backend
+2021-08-24 12:27:52,492 INFO    MainThread:5239 [wandb_init.py:_resume_backend():227] resuming backend
+2021-08-24 12:27:52,508 INFO    MainThread:5239 [wandb_init.py:_pause_backend():222] pausing backend
+2021-08-24 12:27:52,872 INFO    MainThread:5239 [wandb_init.py:_resume_backend():227] resuming backend
+2021-08-24 12:27:57,953 INFO    MainThread:5239 [wandb_init.py:_pause_backend():222] pausing backend
+2021-08-24 12:27:59,323 INFO    MainThread:5239 [wandb_run.py:_atexit_cleanup():1295] got exitcode: 0
+2021-08-24 12:27:59,323 INFO    MainThread:5239 [wandb_run.py:_restore():1267] restore

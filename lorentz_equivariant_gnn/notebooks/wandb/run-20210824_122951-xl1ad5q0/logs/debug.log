@@ -1,0 +1,45 @@
+2021-08-24 12:29:51,066 INFO    MainThread:63740 [wandb_setup.py:_flush():68] setting env: {}
+2021-08-24 12:29:51,066 INFO    MainThread:63740 [wandb_setup.py:_flush():68] multiprocessing start_methods=fork,spawn,forkserver
+2021-08-24 12:29:51,066 INFO    MainThread:63740 [wandb_setup.py:_flush():68] setting login settings: {}
+2021-08-24 12:29:51,066 INFO    MainThread:63740 [wandb_setup.py:_flush():68] configuring jupyter hooks <wandb.sdk.wandb_init._WandbInit object at 0x2aab4e0ff610>
+2021-08-24 12:29:51,067 INFO    MainThread:63740 [wandb_init.py:_log_setup():301] Logging user logs to wandb/run-20210824_122951-xl1ad5q0/logs/debug.log
+2021-08-24 12:29:51,067 INFO    MainThread:63740 [wandb_init.py:_log_setup():302] Logging internal logs to wandb/run-20210824_122951-xl1ad5q0/logs/debug-internal.log
+2021-08-24 12:29:52,717 INFO    MainThread:63740 [wandb_run.py:_console_start():1322] atexit reg
+2021-08-24 12:29:52,717 INFO    MainThread:63740 [wandb_run.py:_redirect():1192] redirect: SettingsConsole.WRAP
+2021-08-24 12:29:52,718 INFO    MainThread:63740 [wandb_run.py:_redirect():1223] Wrapping output streams.
+2021-08-24 12:29:52,718 INFO    MainThread:63740 [wandb_run.py:_redirect():1239] Redirects installed.
+2021-08-24 12:29:52,719 INFO    MainThread:63740 [wandb_run.py:_config_callback():654] config_cb None None {'_wandb': {'cli_version': '0.10.9', 'python_version': '3.7.7', 'is_jupyter_run': True, 'is_kaggle_kernel': False, 'framework': 'torch'}, 'input_dir': '/global/cscratch1/sd/danieltm/ExaTrkX/top_tagging/raw_input/', 'data_split': [100, 100], 'n_epochs': 20, 'lr': 0.001, 'factor': 0.3, 'patience': 10, 'input_feature_dim': 1, 'message_dim': 32, 'output_feature_dim': 2, 'edge_feature_dim': 0, 'n_layers': 6, 'activation': 'SiLU'}
+2021-08-24 12:29:54,442 INFO    MainThread:63740 [wandb_init.py:_pause_backend():222] pausing backend
+2021-08-24 12:30:42,463 INFO    MainThread:63740 [wandb_run.py:_atexit_cleanup():1295] got exitcode: 0
+2021-08-24 12:30:42,464 INFO    MainThread:63740 [wandb_run.py:_restore():1267] restore
+2021-08-24 12:30:42,468 INFO    MainThread:63740 [wandb_run.py:_wait_for_finish():1409] got exit ret: uuid: "03845b6285714c50bb4b52036edf8caf"
+response {
+  poll_exit_response {
+    file_counts {
+      wandb_count: 1
+    }
+    pusher_stats {
+      uploaded_bytes: 925
+      total_bytes: 925
+    }
+  }
+}
+
+2021-08-24 12:30:44,476 INFO    MainThread:63740 [wandb_run.py:_wait_for_finish():1409] got exit ret: uuid: "6d71c73e83dc4960a5cc99504c8f4608"
+response {
+  poll_exit_response {
+    done: true
+    exit_result {
+    }
+    file_counts {
+      wandb_count: 5
+    }
+    pusher_stats {
+      uploaded_bytes: 74701
+      total_bytes: 74701
+    }
+  }
+}
+
+2021-08-24 12:30:45,560 INFO    MainThread:63740 [wandb_run.py:_show_files():1618] logging synced files
+2021-08-24 12:30:45,562 INFO    MainThread:63740 [internal.py:handle_exit():138] Internal process exited
