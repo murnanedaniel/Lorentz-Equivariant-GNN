@@ -5,10 +5,13 @@ import pytorch_lightning as pl
 from pytorch_lightning import LightningModule
 import torch.nn.functional as F
 from torch.nn import Linear
+from torch_geometric.data import DataLoader
 import torch
 import numpy as np
 
-from .utils import *
+from torch_geometric.nn import MessagePassing, global_mean_pool
+
+from .utils import load_datasets
 
 class EGNNBase(LightningModule):
     
@@ -27,13 +30,13 @@ class EGNNBase(LightningModule):
 
     def train_dataloader(self):
         if self.trainset is not None:
-            return DataLoader(self.trainset, batch_size=1, num_workers=1)
+            return DataLoader(self.trainset, batch_size=self.hparams["train_batch"], num_workers=1)
         else:
             return None
 
     def val_dataloader(self):
         if self.valset is not None:
-            return DataLoader(self.valset, batch_size=1, num_workers=1)
+            return DataLoader(self.valset, batch_size=self.hparams["val_batch"], num_workers=1)
         else:
             return None
 
@@ -67,61 +70,49 @@ class EGNNBase(LightningModule):
         return optimizer, scheduler
 
     def training_step(self, batch, batch_idx):
-
-        p, y = torch.squeeze(batch["p"]), batch["y"]
+        
+        p, y = batch.x.float(), batch.y
 
         n_nodes = p.size()[0]
 
-        edges = get_edges(n_nodes)
+        edges = batch.edge_index
         
         output, x = self(p, edges)
-
-        # output, _ = L_GCL.compute_radials(edges, x)
-        # output = torch.sigmoid(torch.mean(output).unsqueeze(0))
-
-        output = torch.mean(output)
-        output = torch.sigmoid(output)
-        output = output.unsqueeze(0)
-
-        loss = F.binary_cross_entropy(output, y.float())
-
-        prediction = output.round()
+        output = global_mean_pool(output, batch.batch).squeeze(1)
+#         print(output)
         
+        loss = F.binary_cross_entropy_with_logits(output, y.float())
+
+        prediction = torch.sigmoid(output).round()
+#         print(prediction, y, prediction==y)
         tp = (prediction == y).sum().item()
-        t = y.sum().item()
-        acc = tp / max(t, 1)
+        acc = tp / len(y)
         
-        self.log_dict({"train_loss": loss, "train_acc": acc})
+        self.log_dict({"train_loss": loss, "train_acc": acc}, on_step=False, on_epoch=True)
 
         return loss
 
     def validation_step(self, batch, batch_idx):
-
-        p, y = torch.squeeze(batch["p"]), batch["y"]
+        
+        p, y = batch.x.float(), batch.y
         n_nodes = p.size()[0]
 
-        edges = get_edges(n_nodes)
+        edges = batch.edge_index
 
         output, x = self(p, edges)
+        output = global_mean_pool(output, batch.batch).squeeze(1)
+#         print(output)
+        
+        loss = F.binary_cross_entropy_with_logits(output, y.float())
 
-        # output, _ = L_GCL.compute_radials(edges, x)
-        # output = torch.sigmoid(torch.mean(output).unsqueeze(0))
-
-        output = torch.mean(output)
-        output = torch.sigmoid(output)
-        output = output.unsqueeze(0)
-
-        prediction = output.round()
-
-        loss = F.binary_cross_entropy(output, y.float())
-
+        prediction = torch.sigmoid(output).round()
+#         print(prediction, y, prediction==y)
         tp = (prediction == y).sum().item()
-        t = y.sum().item()
-        acc = tp / max(t, 1)
+        acc = tp / len(y)
 
         current_lr = self.optimizers().param_groups[0]["lr"]
         
-        self.log_dict({"val_loss": loss, "acc": acc, "current_lr": current_lr})
+        self.log_dict({"val_loss": loss, "acc": acc, "current_lr": current_lr}, on_step=False, on_epoch=True)
 
 
         return {
@@ -154,25 +145,6 @@ class EGNNBase(LightningModule):
         optimizer.zero_grad()
         
     
-def load_datasets(input_dir, data_split):
-    
-    train_file = os.path.join(input_dir, 'test.h5')
-    with pd.HDFStore(train_file, mode = 'r') as store:
-        train_df = store['table']
-
-    val_file = os.path.join(input_dir, 'val.h5')
-    with pd.HDFStore(train_file, mode = 'r') as store:
-        val_df = store['table']
-
-    all_p, all_y = build_dataset(train_df, data_split[0])
-    train_dataset = JetDataset(all_p, all_y)
-#     train_loader = DataLoader(train_dataset)#, batch_size = 100, shuffle = True)
-
-    val_all_p, val_all_y = build_dataset(val_df, data_split[1])
-    val_dataset = JetDataset(val_all_p, val_all_y)
-#     val_loader = DataLoader(val_dataset)
-
-    return train_dataset, val_dataset
 
 def compute_radials(edge_index, x):
     """

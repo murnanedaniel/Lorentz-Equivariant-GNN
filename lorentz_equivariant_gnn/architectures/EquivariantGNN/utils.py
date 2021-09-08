@@ -1,3 +1,5 @@
+import sys
+import os
 import numpy as np
 import warnings
 
@@ -6,7 +8,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 import torch
-from torch.utils.data import Dataset, DataLoader
+from torch_geometric.data import Data
 from torch import nn
 
 
@@ -44,6 +46,23 @@ def make_mlp(
     return nn.Sequential(*layers)
 
 
+def load_datasets(input_dir, data_split):
+    
+    train_file = os.path.join(input_dir, 'test.h5')
+    with pd.HDFStore(train_file, mode = 'r') as store:
+        train_df = store['table']
+
+    val_file = os.path.join(input_dir, 'val.h5')
+    with pd.HDFStore(train_file, mode = 'r') as store:
+        val_df = store['table']
+
+    train_dataset = build_dataset(train_df, data_split[0])
+    val_dataset = build_dataset(val_df, data_split[1])
+     
+    return train_dataset, val_dataset
+
+
+
 def get_four_momenta(jet_tuple):
     energies = np.array([getattr(jet_tuple, f'E_{i}') for i in range(200)])
     x_values = np.array([getattr(jet_tuple, f'PX_{i}') for i in range(200)])
@@ -54,12 +73,14 @@ def get_four_momenta(jet_tuple):
     energies, x_values, y_values, z_values = energies[existing_jet_mask], x_values[existing_jet_mask], y_values[
         existing_jet_mask], z_values[existing_jet_mask]
 
-    p = torch.from_numpy(np.stack([energies, x_values, y_values, z_values])).T
+    p = torch.from_numpy(np.stack([energies, x_values, y_values, z_values])).T.squeeze()
     return p
 
 
 def build_dataset(dataframe, num_jets = None):
-    momenta, truth_labels = [], []
+    
+    dataset = []
+    
     if num_jets is not None:
         subsample = dataframe.sample(n = num_jets)
     else:
@@ -68,28 +89,28 @@ def build_dataset(dataframe, num_jets = None):
     for jet in subsample.itertuples():
         p = get_four_momenta(jet)
         y = torch.tensor(jet.is_signal_new)
+        e = get_edges(len(p))
 
-        momenta.append(p)
-        truth_labels.append(y)
+        dataset.append(Data(x=p, y=y, edge_index=e))
 
-    return momenta, truth_labels
+    return dataset
 
 
-class JetDataset(Dataset):
-    def __init__(self, p, y):
-        super(JetDataset).__init__()
-        self.p = p
-        self.y = y
+# class JetDataset(Dataset):
+#     def __init__(self, p, y):
+#         super(JetDataset).__init__()
+#         self.p = p
+#         self.y = y
 
-    def __len__(self):
-        return len(self.p)
+#     def __len__(self):
+#         return len(self.p)
 
-    def __getitem__(self, idx):
-        this_p = self.p[idx].float()
-        this_y = self.y[idx].long()
+#     def __getitem__(self, idx):
+#         this_p = self.p[idx].float()
+#         this_y = self.y[idx].long()
 
-        sample = {"p": this_p, "y": this_y}
-        return sample
+#         sample = {"p": this_p, "y": this_y}
+#         return sample
 
 
 """

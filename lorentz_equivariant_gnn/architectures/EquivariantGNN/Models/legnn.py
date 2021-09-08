@@ -81,11 +81,15 @@ class L_GCL(nn.Module):
         :param edge_index: Array containing the connection between nodes
         :param messages: List of messages m_{ij} used to calculated an aggregated message for h
         :return: The updated feature vectors h_i^{l+1}
+        
+        TODO: Include attention mechanism of eq. (8)
         """
 
         row, col = edge_index
         message_aggregate = unsorted_segment_sum(messages, row, num_segments = h.size(0))
+        print("Computing feature vec", h.shape, message_aggregate.shape)
         feature_inputs = torch.cat([h, message_aggregate], dim = 1)
+        print("New features", feature_inputs.shape)
         out = self.feature_mlp(feature_inputs)
         return out, message_aggregate
 
@@ -103,12 +107,13 @@ class L_GCL(nn.Module):
 
         row, col = edge_index
 
-        linear_input = torch.cat([x[row], x[col]], dim = 1)
-        coordinate_linear_combination = self.coordinate_linear_combination_mlp(linear_input)
+#         Previous method: Possibly doesn't maintain equivariance??
+#         linear_input = torch.cat([x[row], x[col]], dim = 1)
+#         coordinate_linear_combination = self.coordinate_linear_combination_mlp(linear_input)
+        
+#         Current method: DOES maintain equivariance I believe
+        coordinate_linear_combination = x[row] - x[col]
 
-        #print(messages)
-        #print(self.coordinate_mlp(messages))
-        #weighted_differences = coordinate_difference * self.coordinate_mlp(messages)  # Latter part of the update rule
         weighted_linear_combination = coordinate_linear_combination * self.coordinate_mlp(messages)  # Latter part of the update rule
         relative_updated_coordinates = unsorted_segment_mean(weighted_linear_combination, row, num_segments = x.size(0))  # Computes the summation
         x += relative_updated_coordinates  # Finishes the update rule
@@ -175,12 +180,15 @@ class LEGNN(EGNNBase):
 
     def forward(self, x, edges, edge_attribute = None):
         
-        h, _ = self.compute_radials(edges, x)  # torch.zeros(n_nodes, 1)
-        
+#         h, _ = self.compute_radials(edges, x)  # torch.zeros(n_nodes, 1)
+        h = self.compute_initial_feature(edges, x)  # torch.zeros(n_nodes, 1)
+        print("Initial", x.shape, edges.shape, h.shape)
         h = self.feature_in(h)
         for i in range(0, self.n_layers):
             h, x = self._modules["gcl_%d" % i](h, x, edges, edge_attribute = edge_attribute)
+            print("Loop", i, x.shape, edges.shape, h.shape)
         h = self.feature_out(h)
+        print("Output", x.shape, edges.shape, h.shape)
         return h, x
     
     @staticmethod
@@ -199,6 +207,23 @@ class LEGNN(EGNNBase):
         minkowski_distance_squared[:, 0] = -minkowski_distance_squared[:, 0]  # Place minus sign on time coordinate as \eta = diag(-1, 1, 1, 1)
         radial = torch.sum(minkowski_distance_squared, 1).unsqueeze(1)
         return radial, coordinate_differences
+    
+    @staticmethod
+    def compute_initial_feature(edge_index, x):
+        """
+        Calculates the Minkowski distance (squared) between coordinates (node embeddings) x_i and x_j
+
+        :param edge_index: Array containing the connection between nodes
+        :param x: The coordinates (node embeddings)
+        :return: Minkowski distances (squared) and coordinate differences x_i - x_j
+        """
+
+        momentum_squared = x**2
+        momentum_squared[:, 0] = -momentum_squared[:, 0]
+        minkowski_magnitude = torch.sum(momentum_squared, 1).unsqueeze(1)
+        print(minkowski_magnitude.shape)
+        
+        return minkowski_magnitude
 
 
 """
