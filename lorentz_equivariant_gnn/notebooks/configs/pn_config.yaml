@@ -1,0 +1,22 @@
+# Data params
+input_dir: /global/cscratch1/sd/danieltm/ExaTrkX/top_tagging/raw_input/
+data_split: [4000,1000]
+
+# Training params
+n_epochs: 40
+lr: 0.001
+factor: 0.3
+patience: 20
+warmup: 10
+train_batch: 200
+val_batch: 200
+dropout: 0.1
+
+# Model params
+input_coords_dim: 4
+message_dim: [64, 128, 256]
+output_feature_dim: 1
+nb_layers: 3
+activation: ReLU
+batch_norm: True
+k: 16

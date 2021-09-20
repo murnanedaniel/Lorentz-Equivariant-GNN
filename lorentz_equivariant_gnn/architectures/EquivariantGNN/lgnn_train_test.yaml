@@ -1,11 +1,11 @@
 # Data params
 project: LorentzNet
 input_dir: /global/cscratch1/sd/danieltm/ExaTrkX/top_tagging/raw_input/
-data_split: [[2000,200], [4000,200], [8000,200]]
+data_split: [[2000,200]]
 
 # Training params
 max_epochs: 30
-lr: [0.001, 0.0001, 0.00001]
+lr: [0.001]
 factor: 0.3
 patience: 10
 warmup: 400
@@ -14,10 +14,10 @@ val_batch: 10
 
 # Model params
 input_feature_dim: 1
-message_dim: [16, 32, 64, 128]
+message_dim: [16]
 output_feature_dim: 1
 edge_feature_dim: 0
-n_layers: [2, 4, 6]
+n_layers: [2]
 activation: SiLU
 
 # Callbacks

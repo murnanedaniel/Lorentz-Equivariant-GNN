@@ -53,7 +53,7 @@ class L_GCL(MessagePassing):
 
     def forward(self, x, h, edge_index, edge_attribute = None):
         
-        radial, _ = self.compute_radials(edge_index, x)
+        radial, _ = compute_radials(edge_index, x)
 
         return self.propagate(edge_index, x=x, h=h, radial=radial)
 
@@ -101,8 +101,6 @@ class LEGNN(EGNNBase):
     """
 
     def __init__(self, hparams):
-#     input_feature_dim, message_dim, output_feature_dim, edge_feature_dim,
-#                  device = 'cpu', activation = nn.SiLU(), n_layers = 4):
         """
         Sets up the equivariant network and creates the necessary L_GCL layers
 
@@ -122,16 +120,25 @@ class LEGNN(EGNNBase):
         self.feature_in = nn.Linear(hparams["input_feature_dim"], self.message_dim)  # Initial mixing of features
         self.feature_out = nn.Linear(self.message_dim, hparams["output_feature_dim"])  # Final mixing of features to yield desired output
 
-        for i in range(0, hparams["n_layers"]):
-            self.add_module("gcl_%d" % i, L_GCL(self.message_dim, self.message_dim, self.message_dim,
-                                                hparams["edge_feature_dim"], activation = self.activation()))
+        for i in range(hparams["n_layers"]):
+            self.add_module("gcl_%d" % i, )
+        self.equivariant_layers = nn.ModuleList([
+            L_GCL(self.message_dim, 
+                  self.message_dim, 
+                  self.message_dim,
+                  hparams["edge_feature_dim"], 
+                  activation = self.activation())
+            for _ in range()
+        ])
 
     def forward(self, x, edges, edge_attribute = None):
         
-        h = self.compute_initial_feature(edges, x)
+        h = compute_initial_feature(edges, x)
         h = self.feature_in(h.unsqueeze(1))
-        for i in range(0, self.n_layers):
+        
+        for _ in range(self.n_layers):
             h, x = self._modules["gcl_%d" % i](x, h, edges, edge_attribute = edge_attribute)
+        
         h = self.feature_out(h)
         return h, x
     

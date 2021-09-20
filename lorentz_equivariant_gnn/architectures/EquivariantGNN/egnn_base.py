@@ -48,7 +48,7 @@ class EGNNBase(LightningModule):
 
     def configure_optimizers(self):
         optimizer = [
-            torch.optim.AdamW(
+            torch.optim.Adam(
                 self.parameters(),
                 lr=(self.hparams["lr"]),
                 betas=(0.9, 0.999),
@@ -69,24 +69,22 @@ class EGNNBase(LightningModule):
         ]
         return optimizer, scheduler
 
+    def get_metrics(self, batch, output):
+        
+        prediction = torch.sigmoid(output)
+        tp = (prediction.round() == batch.y).sum().item()
+        acc = tp / len(batch.y)
+        
+        return prediction, acc
+    
     def training_step(self, batch, batch_idx):
-        
-        p, y = batch.x.float(), batch.y
-
-        n_nodes = p.size()[0]
-
-        edges = batch.edge_index
-        
-        output, x = self(p, edges)
-        output = global_mean_pool(output, batch.batch).squeeze(1)
+                
+        output = self(batch).squeeze(-1)
 #         print(output)
         
-        loss = F.binary_cross_entropy_with_logits(output, y.float())
-
-        prediction = torch.sigmoid(output).round()
-#         print(prediction, y, prediction==y)
-        tp = (prediction == y).sum().item()
-        acc = tp / len(y)
+        loss = F.binary_cross_entropy_with_logits(output, batch.y.float())
+        
+        prediction, acc = self.get_metrics(batch, output)
         
         self.log_dict({"train_loss": loss, "train_acc": acc}, on_step=False, on_epoch=True)
 
@@ -94,29 +92,20 @@ class EGNNBase(LightningModule):
 
     def validation_step(self, batch, batch_idx):
         
-        p, y = batch.x.float(), batch.y
-        n_nodes = p.size()[0]
-
-        edges = batch.edge_index
-
-        output, x = self(p, edges)
-        output = global_mean_pool(output, batch.batch).squeeze(1)
-#         print(output)
+        output = self(batch).squeeze(-1)
         
-        loss = F.binary_cross_entropy_with_logits(output, y.float())
+        loss = F.binary_cross_entropy_with_logits(output, batch.y.float())
 
-        prediction = torch.sigmoid(output).round()
-#         print(prediction, y, prediction==y)
-        tp = (prediction == y).sum().item()
-        acc = tp / len(y)
-
+        prediction, acc = self.get_metrics(batch, output)
+        
         current_lr = self.optimizers().param_groups[0]["lr"]
         
         self.log_dict({"val_loss": loss, "acc": acc, "current_lr": current_lr}, on_step=False, on_epoch=True)
 
-
         return {
-            "loss": loss
+            "loss": loss,
+            "preds": prediction,
+            "acc": acc
         }
     
     def optimizer_step(
