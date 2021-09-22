@@ -8,8 +8,7 @@ from torch.nn import Linear
 from torch_geometric.data import DataLoader
 import torch
 import numpy as np
-
-from torch_geometric.nn import MessagePassing, global_mean_pool
+from sklearn.metrics import roc_auc_score, roc_curve
 
 from .utils import load_datasets
 
@@ -30,7 +29,7 @@ class EGNNBase(LightningModule):
 
     def train_dataloader(self):
         if self.trainset is not None:
-            return DataLoader(self.trainset, batch_size=self.hparams["train_batch"], num_workers=1)
+            return DataLoader(self.trainset, batch_size=self.hparams["train_batch"], num_workers=1, shuffle=True)
         else:
             return None
 
@@ -48,7 +47,7 @@ class EGNNBase(LightningModule):
 
     def configure_optimizers(self):
         optimizer = [
-            torch.optim.Adam(
+            torch.optim.AdamW(
                 self.parameters(),
                 lr=(self.hparams["lr"]),
                 betas=(0.9, 0.999),
@@ -75,16 +74,26 @@ class EGNNBase(LightningModule):
         tp = (prediction.round() == batch.y).sum().item()
         acc = tp / len(batch.y)
         
-        return prediction, acc
+        try:
+            auc = roc_auc_score(batch.y.bool().cpu().detach(), prediction.cpu().detach())
+        except:
+            auc = 0
+        fpr, tpr, _ = roc_curve(batch.y.bool().cpu().detach(), prediction.cpu().detach())
+        
+        # Calculate which threshold gives the best signal goal
+        signal_goal_idx = abs(tpr - self.hparams["signal_goal"]).argmin()
+        
+        eps = fpr[signal_goal_idx]
+        
+        return prediction, acc, auc, eps
     
     def training_step(self, batch, batch_idx):
                 
         output = self(batch).squeeze(-1)
-#         print(output)
         
         loss = F.binary_cross_entropy_with_logits(output, batch.y.float())
         
-        prediction, acc = self.get_metrics(batch, output)
+        prediction, acc, auc, inv_eps = self.get_metrics(batch, output)
         
         self.log_dict({"train_loss": loss, "train_acc": acc}, on_step=False, on_epoch=True)
 
@@ -96,17 +105,25 @@ class EGNNBase(LightningModule):
         
         loss = F.binary_cross_entropy_with_logits(output, batch.y.float())
 
-        prediction, acc = self.get_metrics(batch, output)
+        prediction, acc, auc, eps = self.get_metrics(batch, output)
         
         current_lr = self.optimizers().param_groups[0]["lr"]
         
-        self.log_dict({"val_loss": loss, "acc": acc, "current_lr": current_lr}, on_step=False, on_epoch=True)
-
+        self.log_dict({"val_loss": loss, "acc": acc, "auc": auc, "current_lr": current_lr}, on_step=False, on_epoch=True)
+        
         return {
             "loss": loss,
             "preds": prediction,
-            "acc": acc
+            "acc": acc,
+            "auc": auc,
+            "eps": eps
         }
+    
+    def validation_epoch_end(self, step_outputs):
+        mean_eps = np.mean([output["eps"] for output in step_outputs])
+        
+        if mean_eps != 0:
+            self.log_dict({"inv_eps": 1/mean_eps})
     
     def optimizer_step(
         self,

@@ -16,7 +16,7 @@ def compute_radials(edge_index, x):
     radial = torch.sum(minkowski_distance_squared, 1).unsqueeze(1)
     return radial, coordinate_differences
 
-def compute_initial_feature(edge_index, x):
+def compute_initial_feature(x):
     """
     Calculates the Minkowski distance (squared) between coordinates (node embeddings) x_i and x_j
 

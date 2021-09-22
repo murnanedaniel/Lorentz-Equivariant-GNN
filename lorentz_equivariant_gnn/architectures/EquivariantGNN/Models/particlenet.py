@@ -1,5 +1,5 @@
-from torch_geometric.nn import MessagePassing, global_mean_pool
-from torch_geometric.nn.conv import DynamicEdgeConv
+from torch_geometric.nn import global_mean_pool
+from .dynamic_edge_conv import DynamicEdgeConv
 
 from torch import nn
 import torch
@@ -48,18 +48,29 @@ class ParticleNet(EGNNBase):
         )
 
 
+    def concat_feature_set(self, batch, feature_set):
+        
+        return torch.cat([batch[feature].unsqueeze(1) 
+                   if len(batch[feature].shape)==1 
+                   else batch[feature] for feature in self.hparams[feature_set]], dim=-1)
+        
     def forward(self, batch):
         
         all_features = []
         
-        convoluted_nodes = batch.x.float()
+        input_features = self.concat_feature_set(batch, "features").float()
         
-        for i in range(self.n_graph_iters):
-            convoluted_nodes = self.edge_convs[i](convoluted_nodes, batch.batch)
+        input_coordinates = self.concat_feature_set(batch, "coordinates").float()
+        
+        convoluted_nodes = self.edge_convs[0](input_features, x=input_coordinates, batch=batch.batch)
+        all_features.append(convoluted_nodes)
+        
+        for i in range(1, self.n_graph_iters):
+            convoluted_nodes = self.edge_convs[i](convoluted_nodes, x=convoluted_nodes, batch=batch.batch)
             all_features.append(convoluted_nodes)
 
         all_features = torch.cat(all_features, dim=-1)
-        
+
         global_average = global_mean_pool(all_features, batch.batch)       
         
         # Final layers

@@ -61,7 +61,13 @@ def load_datasets(input_dir, data_split):
      
     return train_dataset, val_dataset
 
-
+def calc_kinematics(x, y, z):
+    pt = np.sqrt(x**2 + y**2)
+    theta = np.arctan2(pt, z)
+    eta = -1. * np.log(np.tan(theta / 2.))
+    phi = np.arctan2(y, x)
+    
+    return pt, eta, phi
 
 def get_four_momenta(jet_tuple):
     energies = np.array([getattr(jet_tuple, f'E_{i}') for i in range(200)])
@@ -69,13 +75,25 @@ def get_four_momenta(jet_tuple):
     y_values = np.array([getattr(jet_tuple, f'PY_{i}') for i in range(200)])
     z_values = np.array([getattr(jet_tuple, f'PZ_{i}') for i in range(200)])
 
-    existing_jet_mask = True#energies > 0
+    existing_jet_mask = energies > 0
     energies, x_values, y_values, z_values = energies[existing_jet_mask], x_values[existing_jet_mask], y_values[
         existing_jet_mask], z_values[existing_jet_mask]
 
     p = torch.from_numpy(np.stack([energies, x_values, y_values, z_values])).T.squeeze()
     return p
 
+def get_higher_features(p):
+    
+    E, x, y, z = p.T
+    pt, eta, phi = calc_kinematics(x,y,z)
+    
+    jet = p.sum(0)        
+    jet_pt, jet_eta, jet_phi = calc_kinematics(jet[1], jet[2], jet[3])
+    
+    delta_eta, delta_phi = eta - jet_eta, phi - jet_phi
+    
+    return pt, jet_pt, delta_eta, delta_phi, jet[0]   
+    
 
 def build_dataset(dataframe, num_jets = None):
     
@@ -87,11 +105,29 @@ def build_dataset(dataframe, num_jets = None):
         subsample = dataframe
 
     for jet in subsample.itertuples():
-        p = get_four_momenta(jet)
-        y = torch.tensor(jet.is_signal_new)
-        e = get_edges(len(p))
+        try:
+            p = get_four_momenta(jet)
+            y = torch.tensor(jet.is_signal_new)
+            e = get_edges(len(p))
 
-        dataset.append(Data(x=p, y=y, edge_index=e))
+            pt, jet_pt, delta_eta, delta_phi, jet_E = get_higher_features(p)
+            delta_pt = torch.log(pt / jet_pt)
+            delta_E = torch.log(p[:, 0] / jet_E)
+            delta_R = torch.sqrt( delta_eta**2 + delta_phi**2 )
+
+            dataset.append(Data(x=p, 
+                                y=y, 
+                                edge_index=e, 
+                                log_pt = torch.log(pt), 
+                                log_E = torch.log(p[:, 0]),
+                                delta_eta = delta_eta,
+                                delta_phi = delta_phi,
+                                delta_pt = delta_pt,
+                                delta_E = delta_E,
+                                delta_R = delta_R
+                               ))
+        except:
+            pass
 
     return dataset
 

@@ -1,10 +1,12 @@
 from torch_geometric.nn import MessagePassing
 from torch.nn import Sequential as Seq, Linear, ReLU
+from torch_geometric.nn import global_mean_pool
 
 from torch import nn
 import torch
 
 from ..egnn_base import EGNNBase
+from ..utils import make_mlp
 from .model_utils import compute_radials, compute_initial_feature
 
 
@@ -14,11 +16,10 @@ class L_GCL(MessagePassing):
     the x (co-ordinate) and h (features) node vectors based on these aggregated messages
     """
     
-    def __init__(self, input_feature_dim, message_dim, output_feature_dim, edge_feature_dim, activation = nn.SiLU()):
-        super().__init__(aggr='add') #  "Max" aggregation.
+    def __init__(self, input_feature_dim, message_dim, output_feature_dim, edge_feature_dim, coordinate_dim, activation = nn.SiLU()):
+        super().__init__(aggr='mean') #  "Max" aggregation.
         
         radial_dim = 1  # Only one number is needed to specify Minkowski distance
-        coordinate_dim = 4
         self.message_dim = message_dim
 
         # The MLP used to calculate messages
@@ -49,8 +50,6 @@ class L_GCL(MessagePassing):
             self.layer
         )
 
-        self.coordinate_linear_combination_mlp = nn.Linear(2 * coordinate_dim, coordinate_dim, bias = False)
-
     def forward(self, x, h, edge_index, edge_attribute = None):
         
         radial, _ = compute_radials(edge_index, x)
@@ -59,7 +58,6 @@ class L_GCL(MessagePassing):
 
     def message(self, x_i, x_j, h_i, h_j, radial):
 
-        
         h_messages = self.compute_messages(h_i, h_j, radial)
         x_messages = (x_i - x_j)*self.coordinate_mlp(h_messages)
         
@@ -71,7 +69,6 @@ class L_GCL(MessagePassing):
         x_next = x + aggr[:, self.message_dim:]
     
         return h_next, x_next
-    
     
     def compute_messages(self, source, target, radial, edge_attribute = None):
         """
@@ -116,29 +113,54 @@ class LEGNN(EGNNBase):
         super().__init__(hparams)
         self.message_dim = hparams["message_dim"]
         self.activation = getattr(nn, hparams["activation"])
-        self.n_layers = hparams["n_layers"]
-        self.feature_in = nn.Linear(hparams["input_feature_dim"], self.message_dim)  # Initial mixing of features
-        self.feature_out = nn.Linear(self.message_dim, hparams["output_feature_dim"])  # Final mixing of features to yield desired output
+        self.n_graph_iters = hparams["n_graph_iters"]
 
-        for i in range(hparams["n_layers"]):
-            self.add_module("gcl_%d" % i, )
+        self.initial_equivariant_layer = L_GCL(hparams["input_feature_dim"], 
+                                      self.message_dim, 
+                                      self.message_dim,
+                                      hparams["edge_feature_dim"], 
+                                      hparams["coordinate_dim"],
+                                      activation = self.activation())
+        
         self.equivariant_layers = nn.ModuleList([
             L_GCL(self.message_dim, 
                   self.message_dim, 
                   self.message_dim,
                   hparams["edge_feature_dim"], 
+                  hparams["coordinate_dim"],
                   activation = self.activation())
-            for _ in range()
+            for _ in range(self.n_graph_iters - 1)
         ])
-
-    def forward(self, x, edges, edge_attribute = None):
         
-        h = compute_initial_feature(edges, x)
-        h = self.feature_in(h.unsqueeze(1))
+        # The graph classifier outputs a final score (without sigmoid!)
+#         self.graph_classifier = nn.Sequential(
+#             make_mlp(self.message_dim + hparams["coordinate_dim"], [256]),
+#             nn.Dropout(hparams["dropout"]),
+#             make_mlp(256, [1], output_activation=None)
+#         )
+        self.graph_classifier = nn.Sequential(
+            make_mlp(self.message_dim, [self.message_dim]),
+            nn.Dropout(hparams["dropout"]),
+            make_mlp(self.message_dim, [1], output_activation=None)
+        )
+    
+    def forward(self, batch):
         
-        for _ in range(self.n_layers):
-            h, x = self._modules["gcl_%d" % i](x, h, edges, edge_attribute = edge_attribute)
+        x = batch.x.float()
+        h = compute_initial_feature(x).float().unsqueeze(1)
         
-        h = self.feature_out(h)
-        return h, x
+        h, x = self.initial_equivariant_layer(x, h, batch.edge_index, edge_attribute = None)
+        
+        for i in range(self.n_graph_iters - 1):
+            h, x = self.equivariant_layers[i](x, h, batch.edge_index, edge_attribute = None)
+            
+#         all_features = torch.cat([h, x], dim=-1)
+        all_features = h
+        
+        global_average = global_mean_pool(all_features, batch.batch)
+        
+        # Final layers
+        output = self.graph_classifier(global_average)
+        
+        return output
     
