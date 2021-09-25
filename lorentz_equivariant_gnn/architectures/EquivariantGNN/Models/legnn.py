@@ -7,7 +7,7 @@ import torch
 
 from ..egnn_base import EGNNBase
 from ..utils import make_mlp
-from .model_utils import compute_radials, compute_initial_feature
+from .model_utils import compute_radials, compute_vector_invariants
 
 
 class L_GCL(MessagePassing):
@@ -132,12 +132,6 @@ class LEGNN(EGNNBase):
             for _ in range(self.n_graph_iters - 1)
         ])
         
-        # The graph classifier outputs a final score (without sigmoid!)
-#         self.graph_classifier = nn.Sequential(
-#             make_mlp(self.message_dim + hparams["coordinate_dim"], [256]),
-#             nn.Dropout(hparams["dropout"]),
-#             make_mlp(256, [1], output_activation=None)
-#         )
         self.graph_classifier = nn.Sequential(
             make_mlp(self.message_dim, [self.message_dim]),
             nn.Dropout(hparams["dropout"]),
@@ -147,7 +141,7 @@ class LEGNN(EGNNBase):
     def forward(self, batch):
         
         x = batch.x.float()
-        h = compute_initial_feature(x).float().unsqueeze(1)
+        h = compute_vector_invariants(x).float().unsqueeze(1)
         
         h, x = self.initial_equivariant_layer(x, h, batch.edge_index, edge_attribute = None)
         

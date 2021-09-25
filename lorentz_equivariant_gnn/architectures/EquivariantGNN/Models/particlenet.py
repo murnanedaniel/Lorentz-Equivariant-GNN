@@ -2,6 +2,7 @@ from torch_geometric.nn import global_mean_pool
 from .dynamic_edge_conv import DynamicEdgeConv
 
 from torch import nn
+import torch.nn.functional as F
 import torch
 
 from ..utils import make_mlp
@@ -21,19 +22,16 @@ class ParticleNet(EGNNBase):
         self.hidden_dims = hparams["message_dim"]
         self.input_dims = [hparams["input_coords_dim"]] + self.hidden_dims[:-1]
         self.nb_layers = hparams["nb_layers"]
-        
-        # The node encoder transforms input node features to the hidden space
-        self.node_encoder = make_mlp(hparams["input_coords_dim"], [self.hidden_dims[0]]*self.nb_layers)
 
         # The edge networks computes new edge features from connected nodes
         self.edge_networks = [
                 make_mlp(
-                input_dim * 2,
-                [hidden_dim] * self.nb_layers,
+                (sum(self.input_dims[:i+1])) * 2,
+                [self.hidden_dims[i]] * self.nb_layers,
                 hidden_activation=hparams["activation"],
                 output_activation=hparams["activation"],
                 batch_norm=hparams["batch_norm"],
-            ) for input_dim, hidden_dim in zip(self.input_dims, self.hidden_dims)
+            ) for i in range(self.n_graph_iters)
         ]
         self.edge_convs = nn.ModuleList([
             DynamicEdgeConv(edge_network, k=hparams["k"], aggr="mean")
@@ -41,8 +39,11 @@ class ParticleNet(EGNNBase):
         ])
 
         # The graph classifier outputs a final score (without sigmoid!)
+#         output_size = sum(self.hidden_dims)
+        output_size = sum(self.hidden_dims) + hparams["input_coords_dim"]
+        
         self.graph_classifier = nn.Sequential(
-            make_mlp(sum(self.hidden_dims), [256]),
+            make_mlp(output_size, [256], output_activation=hparams["activation"]),
             nn.Dropout(hparams["dropout"]),
             make_mlp(256, [1], output_activation=None)
         )
@@ -59,17 +60,21 @@ class ParticleNet(EGNNBase):
         all_features = []
         
         input_features = self.concat_feature_set(batch, "features").float()
-        
         input_coordinates = self.concat_feature_set(batch, "coordinates").float()
         
         convoluted_nodes = self.edge_convs[0](input_features, x=input_coordinates, batch=batch.batch)
-        all_features.append(convoluted_nodes)
+        convoluted_nodes = F.relu(torch.cat([input_features, convoluted_nodes], dim=-1))
+#         all_features.append(convoluted_nodes)
         
         for i in range(1, self.n_graph_iters):
+            convoluted_nodes_initial = convoluted_nodes
             convoluted_nodes = self.edge_convs[i](convoluted_nodes, x=convoluted_nodes, batch=batch.batch)
-            all_features.append(convoluted_nodes)
+            convoluted_nodes = F.relu(torch.cat([convoluted_nodes, convoluted_nodes_initial], dim=-1))
+            
+#             all_features.append(convoluted_nodes)
 
-        all_features = torch.cat(all_features, dim=-1)
+#         all_features = torch.cat(all_features, dim=-1)
+        all_features = convoluted_nodes
 
         global_average = global_mean_pool(all_features, batch.batch)       
         

@@ -1,4 +1,4 @@
-job_name: traintrack_job
+job_name: equivariant_tt_job
 constraint: gpu
 nodes: 1
 gpus: 1

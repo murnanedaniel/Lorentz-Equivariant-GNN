@@ -1,2 +1,2 @@
 stage_list:
-    - {set: EquivariantGNN, name: LEGNN, config: lgnn_train.yaml, batch_config: configs/batch_gpu_default.yaml}
+    - {set: EquivariantGNN, name: SkipGeneralGNN, config: pn_general_gnn_config.yaml, batch_config: configs/batch_gpu_default.yaml}

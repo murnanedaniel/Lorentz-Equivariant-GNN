@@ -25,7 +25,12 @@ class EGNNBase(LightningModule):
 
     def setup(self, stage):
         # Handle any subset of [train, val, test] data split, assuming that ordering
-        self.trainset, self.valset = load_datasets(self.hparams["input_dir"], self.hparams["data_split"])
+        self.trainset, self.valset, self.testset = load_datasets(self.hparams["input_dir"], 
+                                                   self.hparams["data_split"],
+                                                  self.hparams["graph_construction"],
+                                                  self.hparams["r"],
+                                                   self.hparams["k"],
+                                                  self.hparams["equivariant"])
 
     def train_dataloader(self):
         if self.trainset is not None:
@@ -52,6 +57,7 @@ class EGNNBase(LightningModule):
                 lr=(self.hparams["lr"]),
                 betas=(0.9, 0.999),
                 eps=1e-08,
+                weight_decay=0.0001,
                 amsgrad=True,
             )
         ]
@@ -123,7 +129,7 @@ class EGNNBase(LightningModule):
         mean_eps = np.mean([output["eps"] for output in step_outputs])
         
         if mean_eps != 0:
-            self.log_dict({"inv_eps": 1/mean_eps})
+            self.log_dict({"inv_eps": 1/mean_eps, "ant": (1/mean_eps) / self.get_num_params()})
     
     def optimizer_step(
         self,
@@ -150,6 +156,9 @@ class EGNNBase(LightningModule):
         optimizer.step(closure=optimizer_closure)
         optimizer.zero_grad()
         
+    def get_num_params(self):
+        return sum(p.numel() for p in self.parameters() if p.requires_grad)
+    
     
 
 def compute_radials(edge_index, x):

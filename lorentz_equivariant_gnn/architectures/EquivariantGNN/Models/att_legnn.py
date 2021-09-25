@@ -7,7 +7,7 @@ import torch
 
 from ..egnn_base import EGNNBase
 from ..utils import make_mlp
-from .model_utils import compute_radials, compute_initial_feature
+from .model_utils import compute_vector_invariants, get_minkowski_distance, get_scalar_product
 
 
 class L_GCL(MessagePassing):

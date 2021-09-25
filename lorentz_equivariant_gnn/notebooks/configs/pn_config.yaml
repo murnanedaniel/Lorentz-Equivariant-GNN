@@ -1,6 +1,6 @@
 # Data params
 input_dir: /global/cscratch1/sd/danieltm/ExaTrkX/top_tagging/raw_input/
-data_split: [100000,5000]
+data_split: [200000,10000,5]
 
 # Training params
 n_epochs: 40
@@ -21,5 +21,8 @@ nb_layers: 3
 activation: ReLU
 batch_norm: True
 k: 16
+r: 1
+graph_construction: dynamic_knn
+equivariant: False
 features: [delta_eta, delta_phi, log_pt, log_E, delta_pt, delta_E, delta_R]
 coordinates: [delta_eta, delta_phi]

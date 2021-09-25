@@ -1,24 +1,31 @@
 # Data params
 input_dir: /global/cscratch1/sd/danieltm/ExaTrkX/top_tagging/raw_input/
-data_split: [100000,5000]
+data_split: [100000,10000]
 
 # Training params
 n_epochs: 50
 lr: 0.003
 factor: 0.3
 patience: 20
-warmup: 1000
+warmup: 100
 train_batch: 200
 val_batch: 200
 dropout: 0.1
 signal_goal: 0.3 # The efficiency goal for the signal jets
 
+# Equivariance params
+equivariant: True
+vectors: x
+scalars: []
+
 # Model params
 input_feature_dim: 1
 coordinate_dim: 4
+invariant_edge_features: 1
 message_dim: 32
-nb_edge_layers: 3
-nb_node_layers: 3
+nb_edge_layers: 2
+nb_node_layers: 2
 output_feature_dim: 1
 n_graph_iters: 2
 activation: SiLU
+graph_construction: fully_connected
