@@ -26,11 +26,18 @@ class EGNNBase(LightningModule):
     def setup(self, stage):
         # Handle any subset of [train, val, test] data split, assuming that ordering
         self.trainset, self.valset, self.testset = load_datasets(self.hparams["input_dir"], 
-                                                   self.hparams["data_split"],
-                                                  self.hparams["graph_construction"],
-                                                  self.hparams["r"],
-                                                   self.hparams["k"],
-                                                  self.hparams["equivariant"])
+                                                    self.hparams["data_split"],
+                                                    self.hparams["graph_construction"],
+                                                    self.hparams["r"],
+                                                    self.hparams["k"],
+                                                    self.hparams["equivariant"]
+                                                    )
+        
+        if "logger" in self.trainer.__dict__.keys() and "_experiment" in self.logger.__dict__.keys():
+            self.logger.experiment.define_metric("val_loss" , summary="min")
+            self.logger.experiment.define_metric("auc" , summary="max")
+            self.logger.experiment.define_metric("acc" , summary="max")
+            self.logger.experiment.define_metric("inv_eps" , summary="max")
 
     def train_dataloader(self):
         if self.trainset is not None:

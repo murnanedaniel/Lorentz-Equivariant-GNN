@@ -101,6 +101,25 @@ class GeneralConv(MessagePassing):
     
 
 
+class OutputNetwork(torch.nn.Module):
+    def __init__(self, hparams):
+        
+        if hparams["shortcut"] is "skip":
+            fully_connected_dim = sum(self.message_dim) + len(self.scalars) + hparams["scalar_dim"]
+        elif hparams["shortcut"] is "concat":
+            fully_connected_dim = sum(self.message_dim)
+        else:
+            fully_connected_dim = self.message_dim[-1]
+        
+        # The graph classifier outputs a final score (without sigmoid!)
+        self.network = nn.Sequential(
+            make_mlp(fully_connected_dim, [hparams["final_dim"]]),
+            nn.Dropout(hparams["dropout"]),
+            make_mlp(hparams["final_dim"], [1], output_activation=None))
+        
+    def forward(self, global_pooled_features)
+        
+        return self.network(global_pooled_features)
     
 
 class GeneralGNN(EGNNBase):
@@ -140,8 +159,7 @@ class GeneralGNN(EGNNBase):
         else:
             self.n_graph_iters = len(self.message_dim)
         
-        propagate_vector_dims = hparams["vector_dim"] if self.equivariant else 0
-#         propagate_invariant_dims = hparams["invariant_vector_dim"] if self.equivariant else 0
+        self.propagate_vector_dims = hparams["vector_dim"] if self.equivariant else 0
         
         self.convolution_layers = nn.ModuleList(
             [GeneralConv(
@@ -154,18 +172,12 @@ class GeneralGNN(EGNNBase):
                   scalar_dim = self.message_dim[i-1], 
                   message_dim = self.message_dim[i], 
                   invariant_vector_dim = hparams["invariant_vector_dim"], 
-                  vector_dim = propagate_vector_dims,
+                  vector_dim = self.propagate_vector_dims,
                   hparams = hparams)
                 for i in range(1, self.n_graph_iters)
             ])
         
-        fully_connected_dim = sum(self.message_dim) if self.concat_output else self.message_dim[-1]
-        
-        # The graph classifier outputs a final score (without sigmoid!)
-        self.graph_classifier = nn.Sequential(
-            make_mlp(fully_connected_dim, [hparams["final_dim"]]),
-            nn.Dropout(hparams["dropout"]),
-            make_mlp(hparams["final_dim"], [1], output_activation=None))
+        self.graph_classifier = OutputNetwork(hparams)
     
     def get_node_features(self, batch):
         
@@ -184,7 +196,9 @@ class GeneralGNN(EGNNBase):
         if len(s.shape)==1: s=s.unsqueeze(1)
         
         return s.float(), v.float()
-            
+    
+    
+    
     def forward(self, batch):
         
         s, v = self.get_node_features(batch)
@@ -194,6 +208,7 @@ class GeneralGNN(EGNNBase):
         for i in range(self.n_graph_iters):                
             
             s, v = self.convolution_layers[i](s, v, batch.edge_index, edge_attribute = None)
+            
             all_features.append(s) if self.concat_output else s
             
             if self.graph_construction == "dynamic_knn":
