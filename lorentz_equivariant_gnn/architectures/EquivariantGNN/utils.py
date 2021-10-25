@@ -2,10 +2,12 @@ import sys
 import os
 import numpy as np
 import warnings
+import time
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
 import pandas as pd
 import matplotlib.pyplot as plt
+import itertools
 
 import torch
 from torch_geometric.data import Data
@@ -71,6 +73,33 @@ def load_datasets(input_dir, data_split, graph_construction, r, k, equivariant):
      
     return train_dataset, val_dataset, test_dataset
 
+def open_processed_files(input_dir, num_jets):
+    
+    jet_files = os.listdir(input_dir)
+    num_files = (num_jets // 100000) + 1
+    jet_paths = [os.path.join(input_dir, file) for file in jet_files][:num_files]
+    opened_files = [torch.load(file) for file in jet_paths]
+    
+    opened_files = list(itertools.chain.from_iterable(opened_files))
+    
+    return opened_files
+
+def load_processed_datasets(input_dir,  data_split, graph_construction, r, k, equivariant):
+    
+    print("Loading torch files")
+    print(time.ctime())
+    train_jets = open_processed_files(os.path.join(input_dir, "train"), data_split[0])
+    val_jets = open_processed_files(os.path.join(input_dir, "val"), data_split[1])
+    test_jets = open_processed_files(os.path.join(input_dir, "test"), data_split[2])
+    
+    print("Building events")
+    print(time.ctime())
+    train_dataset = build_processed_dataset(train_jets, graph_construction, r, k, equivariant, data_split[0])
+    val_dataset = build_processed_dataset(val_jets, graph_construction, r, k, equivariant, data_split[1])
+    test_dataset = build_processed_dataset(test_jets, graph_construction, r, k, equivariant, data_split[2])
+    
+    return train_dataset, val_dataset, test_dataset
+    
 def calc_kinematics(x, y, z):
     pt = np.sqrt(x**2 + y**2)
     theta = np.arctan2(pt, z)
@@ -110,11 +139,11 @@ def build_dataset(dataframe, graph_construction, r, k, equivariant, num_jets = N
     dataset = []
     
     if num_jets is not None:
-        subsample = dataframe.sample(n = num_jets)
+        subsample = dataframe.iloc[:num_jets]
     else:
         subsample = dataframe
 
-    for jet in subsample.itertuples():
+    for i, jet in enumerate(subsample.itertuples()):
         try:
             p = get_four_momenta(jet)
             y = torch.tensor(jet.is_signal_new)
@@ -131,7 +160,6 @@ def build_dataset(dataframe, graph_construction, r, k, equivariant, num_jets = N
             else:
                 e = knn_graph(torch.cat([delta_eta.unsqueeze(1), delta_phi.unsqueeze(1)], dim=-1), k)
 
-
             dataset.append(Data(x=p, 
                                 y=y, 
                                 edge_index=e, 
@@ -143,42 +171,31 @@ def build_dataset(dataframe, graph_construction, r, k, equivariant, num_jets = N
                                 delta_E = delta_E,
                                 delta_R = delta_R
                                ))
+            
+            if (i%100000) == 0:
+                print("Built event:", i)
         except:
             pass
 
     return dataset
 
+def build_processed_dataset(jetlist, graph_construction, r, k, equivariant, num_jets = None):
+    
+    if num_jets is not None:
+        subsample = jetlist[:num_jets]
+    else:
+        subsample = jetlist
 
-# class JetDataset(Dataset):
-#     def __init__(self, p, y):
-#         super(JetDataset).__init__()
-#         self.p = p
-#         self.y = y
+    if (graph_construction == "fully_connected") or equivariant:
+        
+        for i, jet in enumerate(subsample):
+        
+            if (graph_construction == "fully_connected"):
+                jet.edge_index = get_fully_connected_edges(jet.x)
+            elif equivariant:
+                jet.edge_index = minkowski_knn(jet.x, k)
 
-#     def __len__(self):
-#         return len(self.p)
-
-#     def __getitem__(self, idx):
-#         this_p = self.p[idx].float()
-#         this_y = self.y[idx].long()
-
-#         sample = {"p": this_p, "y": this_y}
-#         return sample
-
-
-"""
-Returns an array of edge links corresponding to a fully-connected graph - OLD VERSION
-"""
-# def get_edges(n_nodes):
-#     rows, cols = [], []
-#     for i in range(n_nodes):
-#         for j in range(n_nodes):
-#             if i != j:
-#                 rows.append(i)
-#                 cols.append(j)
-
-#     edges = [rows, cols]
-#     return torch.tensor(edges)
+    return subsample
 
 """
 Returns an array of edge links corresponding to a fully-connected graph - NEW VERSION

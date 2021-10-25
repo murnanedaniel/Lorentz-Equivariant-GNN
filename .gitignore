@@ -5,3 +5,5 @@ venv
 
 *logs*
 *wandb*
+*.pt
+**.pt

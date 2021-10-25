@@ -1,5 +1,6 @@
 import sys, os
 import logging
+import time
 
 import pytorch_lightning as pl
 from pytorch_lightning import LightningModule
@@ -10,7 +11,7 @@ import torch
 import numpy as np
 from sklearn.metrics import roc_auc_score, roc_curve
 
-from .utils import load_datasets
+from .utils import load_processed_datasets
 
 class EGNNBase(LightningModule):
     
@@ -25,7 +26,12 @@ class EGNNBase(LightningModule):
 
     def setup(self, stage):
         # Handle any subset of [train, val, test] data split, assuming that ordering
-        self.trainset, self.valset, self.testset = load_datasets(self.hparams["input_dir"], 
+        
+        print(time.ctime())
+        self.hparams["warmup"] = (self.hparams["warmup_steps"] 
+                                  * self.hparams["data_split"][0] / self.hparams["train_batch"])
+        
+        self.trainset, self.valset, self.testset = load_processed_datasets(self.hparams["input_dir"], 
                                                     self.hparams["data_split"],
                                                     self.hparams["graph_construction"],
                                                     self.hparams["r"],
@@ -38,7 +44,9 @@ class EGNNBase(LightningModule):
             self.logger.experiment.define_metric("auc" , summary="max")
             self.logger.experiment.define_metric("acc" , summary="max")
             self.logger.experiment.define_metric("inv_eps" , summary="max")
-
+            
+        print(time.ctime())
+        
     def train_dataloader(self):
         if self.trainset is not None:
             return DataLoader(self.trainset, batch_size=self.hparams["train_batch"], num_workers=1, shuffle=True)

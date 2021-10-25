@@ -103,13 +103,14 @@ class GeneralConv(MessagePassing):
 
 class OutputNetwork(torch.nn.Module):
     def __init__(self, hparams):
+        super(OutputNetwork, self).__init__()
         
         if hparams["shortcut"] is "skip":
-            fully_connected_dim = sum(self.message_dim) + len(self.scalars) + hparams["scalar_dim"]
+            fully_connected_dim = sum(hparams["message_dim"]) + len(hparams["scalars"]) + hparams["scalar_dim"]
         elif hparams["shortcut"] is "concat":
-            fully_connected_dim = sum(self.message_dim)
+            fully_connected_dim = sum(hparams["message_dim"])
         else:
-            fully_connected_dim = self.message_dim[-1]
+            fully_connected_dim = hparams["message_dim"][-1]
         
         # The graph classifier outputs a final score (without sigmoid!)
         self.network = nn.Sequential(
@@ -117,7 +118,8 @@ class OutputNetwork(torch.nn.Module):
             nn.Dropout(hparams["dropout"]),
             make_mlp(hparams["final_dim"], [1], output_activation=None))
         
-    def forward(self, global_pooled_features)
+        
+    def forward(self, global_pooled_features):
         
         return self.network(global_pooled_features)
     
@@ -142,42 +144,38 @@ class GeneralGNN(EGNNBase):
 
         super().__init__(hparams)
         torch.autograd.set_detect_anomaly(True)
-        self.message_dim = hparams["message_dim"]
-        self.activation = hparams["activation"]
-        self.n_graph_iters = hparams["n_graph_iters"]
         self.equivariant = hparams["equivariant"]
         self.graph_construction = hparams["graph_construction"]
         self.k = hparams["k"]
-        self.concat_output = hparams["concat_output"]
         
-        self.scalars = [] if hparams["scalars"] is None else hparams["scalars"]
+        self.hparams["scalars"] = [] if hparams["scalars"] is None else hparams["scalars"]
         
-        if (type(self.message_dim) is int):
-            self.message_dim = [self.message_dim] * self.n_graph_iters
-        elif (len(self.message_dim) == 1):
-            self.message_dim = self.message_dim * self.n_graph_iters
+        if (type(self.hparams["message_dim"]) is int):
+            self.hparams["message_dim"] = [self.hparams["message_dim"]] * self.hparams["n_graph_iters"]
+        elif (len(self.hparams["message_dim"]) == 1):
+            self.hparams["message_dim"] = self.hparams["message_dim"] * self.hparams["n_graph_iters"]
         else:
-            self.n_graph_iters = len(self.message_dim)
+            self.hparams["n_graph_iters"] = len(self.hparams["message_dim"])
         
         self.propagate_vector_dims = hparams["vector_dim"] if self.equivariant else 0
         
         self.convolution_layers = nn.ModuleList(
             [GeneralConv(
-                  scalar_dim = len(self.scalars) + hparams["scalar_dim"], 
-                  message_dim = self.message_dim[0], 
+                  scalar_dim = len(self.hparams["scalars"]) + hparams["scalar_dim"], 
+                  message_dim = self.hparams["message_dim"][0], 
                   invariant_vector_dim = hparams["invariant_vector_dim"], 
                   vector_dim = hparams["vector_dim"],
                   hparams = hparams)] 
             + [GeneralConv(
-                  scalar_dim = self.message_dim[i-1], 
-                  message_dim = self.message_dim[i], 
+                  scalar_dim = self.hparams["message_dim"][i-1], 
+                  message_dim = self.hparams["message_dim"][i], 
                   invariant_vector_dim = hparams["invariant_vector_dim"], 
                   vector_dim = self.propagate_vector_dims,
                   hparams = hparams)
-                for i in range(1, self.n_graph_iters)
+                for i in range(1, self.hparams["n_graph_iters"])
             ])
         
-        self.graph_classifier = OutputNetwork(hparams)
+        self.graph_classifier = OutputNetwork(self.hparams)
     
     def get_node_features(self, batch):
         
@@ -187,7 +185,7 @@ class GeneralGNN(EGNNBase):
         # Get all scalars
         s = [batch[feature].unsqueeze(-1) 
                    if len(batch[feature].shape)==1 
-                   else batch[feature] for feature in self.scalars]
+                   else batch[feature] for feature in self.hparams["scalars"]]
         # Add vector invariants to the list of scalars
         s += [compute_vector_invariants(v).unsqueeze(-1)]
         
@@ -197,28 +195,47 @@ class GeneralGNN(EGNNBase):
         
         return s.float(), v.float()
     
+    def handle_message_passing(self, convolution_layer, batch, s_in, v_in, all_features):
+        
+        s_out, v_out = convolution_layer(s_in, v_in, batch.edge_index, edge_attribute = None)
+        
+        if self.hparams["shortcut"] is "skip":
+            s_out = F.relu(torch.cat([s_out, s_in], dim=-1))
+            
+        elif self.hparams["shortcut"] is "concat":
+            all_features.append(s_out)
+        
+        return s_out, v_out, all_features
     
+    def get_edge_indices(self, batch):
+        
+        if self.graph_construction == "fully_connected":
+            return batch
+        elif not self.equivariant:
+            batch.edge_index = knn_graph(torch.cat([batch.delta_eta.unsqueeze(-1), batch.delta_phi.unsqueeze(-1)], dim=-1), self.k, batch.batch)
+        
+        return batch
     
     def forward(self, batch):
         
         s, v = self.get_node_features(batch)
         
+        batch = self.get_edge_indices(batch)
+        
         all_features = []
         
-        for i in range(self.n_graph_iters):                
+        for i in range(self.hparams["n_graph_iters"]):                
             
-            s, v = self.convolution_layers[i](s, v, batch.edge_index, edge_attribute = None)
-            
-            all_features.append(s) if self.concat_output else s
+            s, v, all_features = self.handle_message_passing(self.convolution_layers[i], batch, s, v, all_features)
             
             if self.graph_construction == "dynamic_knn":
                 batch.edge_index = knn_graph(s, self.k, batch.batch)
-        
-        if self.concat_output:
-            all_features = torch.cat(all_features, dim=-1)
-        
-        global_average = global_mean_pool(all_features, batch.batch)
-        
+
+        if self.hparams["shortcut"] is "concat":
+            global_average = global_mean_pool(torch.cat(all_features, dim=-1), batch.batch)
+        else:
+            global_average = global_mean_pool(s, batch.batch)
+
         # Final layers
         output = self.graph_classifier(global_average)
         
